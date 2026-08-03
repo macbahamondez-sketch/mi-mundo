@@ -14,7 +14,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ error: 'Falta configurar PIXABAY_API_KEY en Vercel.' });
     }
 
-    const url = 'https://pixabay.com/api/?key=' + PIXABAY_KEY + '&q=' + encodeURIComponent(q) + '&per_page=9&image_type=photo&lang=es';
+    const url = 'https://pixabay.com/api/?key=' + PIXABAY_KEY + '&q=' + encodeURIComponent(q) + '&per_page=15&image_type=photo';
 
     const response = await fetch(url);
     const data = await response.json();
