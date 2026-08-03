@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Mi Mundo ✨</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi Mundo">
+<meta name="theme-color" content="#FAF8F5">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500&display=swap');
+:root {
+  --bg:#FAF8F5;--white:#FFFFFF;--rose:#F2D5D5;--rose-d:#B8787A;
+  --lav:#E8E2F5;--lav-d:#8A7EC0;--sage:#D8EAD8;--sage-d:#6A9A6A;
+  --peach:#F5E3D0;--peach-d:#C07A50;--butter:#F7F2D8;--butter-d:#A89840;
+  --sky:#D5E8F2;--sky-d:#5A8FAA;--mint:#D5F0E8;--mint-d:#4A9A7A;
+  --text:#2E2A2A;--soft:#9A9090;--xs:#C8C2C2;--border:#EDE8E3;
+  --r:16px;--shadow:0 2px 14px rgba(0,0,0,0.06);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;}
+
+/* LOGIN */
+.login-screen{position:fixed;inset:0;background:linear-gradient(135deg,var(--rose),var(--lav),var(--sky));display:flex;align-items:center;justify-content:center;z-index:9999;padding:24px;}
+.login-box{background:white;border-radius:24px;padding:32px 24px;width:100%;max-width:360px;box-shadow:0 8px 40px rgba(0,0,0,0.12);}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:28px;text-align:center;margin-bottom:6px;}
+.login-sub{font-size:13px;color:var(--soft);text-align:center;margin-bottom:24px;}
+.login-tabs{display:flex;gap:0;margin-bottom:20px;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;}
+.login-tab{flex:1;border:none;padding:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:none;color:var(--soft);}
+.login-tab.on{background:var(--text);color:white;}
+.login-input{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;background:var(--bg);color:var(--text);outline:none;margin-bottom:10px;}
+.login-input:focus{border-color:var(--lav-d);}
+.login-btn{width:100%;background:var(--text);color:white;border:none;border-radius:12px;padding:13px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;margin-top:6px;}
+.login-err{font-size:12px;color:var(--rose-d);text-align:center;margin-top:8px;min-height:18px;}
+.login-note{font-size:11px;color:var(--soft);text-align:center;margin-top:12px;line-height:1.5;}
+
+/* NAV */
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:999;background:rgba(255,255,255,0.97);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:10px 0 22px;}
+.nb{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;color:var(--soft);font-family:'DM Sans',sans-serif;font-size:9px;padding:2px 6px;}
+.nb.on{color:var(--text);}
+.nb span:first-child{font-size:20px;}
+
+/* PAGES */
+.pg{display:none;padding-bottom:100px;max-width:600px;margin:0 auto;}
+.pg.on{display:block;}
+
+/* HERO */
+.hero{padding:44px 18px 24px;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin-bottom:4px;}
+.hero p{color:var(--soft);font-size:13px;}
+
+/* CARD */
+.card{background:var(--white);border-radius:var(--r);padding:16px;margin:0 16px 13px;box-shadow:var(--shadow);border:1px solid var(--border);}
+.clabel{font-size:11px;font-weight:600;color:var(--soft);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;}
+
+/* INPUTS */
+input[type=text],input[type=url],input[type=date],input[type=email],input[type=password],textarea,select{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:14px;background:var(--bg);color:var(--text);outline:none;}
+input[type=file]{display:none;}
+input[type=color]{width:42px;height:42px;border-radius:50%;border:2px solid var(--border);cursor:pointer;padding:2px;flex-shrink:0;}
+textarea{resize:none;line-height:1.5;}
+select{appearance:none;padding-right:30px;cursor:pointer;}
+.row{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start;}
+.row>*:not(.btn):not(.fbtn){flex:1;}
+.btn{background:var(--text);color:#fff;border:none;border-radius:12px;padding:10px 16px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.btn-sm{padding:9px 13px;}
+.btn-outline{background:none;color:var(--text);border:1.5px solid var(--border);}
+.fbtn{display:inline-flex;align-items:center;gap:5px;background:var(--lav);color:var(--lav-d);border:none;border-radius:10px;padding:9px 13px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;flex-shrink:0;}
+.del{background:none;border:none;cursor:pointer;color:var(--xs);font-size:18px;line-height:1;padding:0 2px;flex-shrink:0;}
+.empty{text-align:center;padding:28px 0;color:var(--soft);font-size:13px;}
+.eic{font-size:30px;margin-bottom:6px;}
+.irow{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);}
+.irow:last-child{border-bottom:none;padding-bottom:0;}
+.ibody{flex:1;min-width:0;}
+.ititle{font-size:14px;font-weight:500;}
+.isub{font-size:12px;color:var(--soft);margin-top:2px;}
+.ilink{font-size:12px;color:var(--sky-d);text-decoration:none;display:block;margin-top:2px;}
+
+/* INICIO */
+.ihero{background:linear-gradient(135deg,#F2D5D5 0%,#E8E2F5 50%,#D5E8F2 100%);padding:52px 20px 32px;text-align:center;}
+.igreet{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;margin-bottom:6px;}
+.idate{font-size:13px;color:var(--soft);}
+.iuser{font-size:12px;color:var(--lav-d);margin-top:4px;}
+.alert{margin:14px 16px 0;background:linear-gradient(135deg,var(--butter),var(--peach));border-radius:var(--r);padding:14px 16px;font-size:13px;line-height:1.5;border:1px solid var(--border);}
+.alert strong{display:block;font-size:14px;margin-bottom:3px;}
+.accesos{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;}
+.ac{background:var(--white);border-radius:var(--r);padding:20px 14px;box-shadow:var(--shadow);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;text-align:center;}
+.ac:active{opacity:.8;}
+.ac-ic{font-size:26px;}
+.ac-nm{font-size:13px;font-weight:500;}
+.ac-sub{font-size:11px;color:var(--soft);}
+.logout-btn{display:block;margin:0 16px 16px;background:none;border:1.5px solid var(--border);border-radius:12px;padding:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--soft);cursor:pointer;width:calc(100% - 32px);}
+
+/* ESTILO TABS */
+.stabs{display:flex;gap:8px;padding:14px 16px 4px;}
+.stab{flex:1;border:none;border-radius:12px;padding:10px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;background:var(--border);color:var(--soft);text-align:center;}
+.stab.on{background:var(--text);color:white;}
+.ssub{display:none;padding:12px 16px 0;}
+.ssub.on{display:block;}
+
+/* OUTFITS */
+.ogrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.ocard{background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;}
+.oimg{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;}
+.oph{width:100%;aspect-ratio:3/4;background:linear-gradient(135deg,var(--lav),var(--rose));display:flex;align-items:center;justify-content:center;font-size:34px;}
+.oinfo{padding:10px 12px;}
+.oname{font-size:13px;font-weight:500;}
+.otag{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--lav);color:var(--lav-d);font-weight:500;display:inline-block;margin-top:4px;}
+.odel{position:absolute;top:7px;right:7px;background:rgba(255,255,255,.9);border:none;border-radius:50%;width:24px;height:24px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--soft);}
+
+/* CHAT */
+.chatbox{background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:13px;}
+.chatheader{padding:13px 16px;display:flex;align-items:center;gap:10px;}
+.chname{font-size:14px;font-weight:600;}
+.chsub{font-size:11px;color:var(--soft);}
+.chatmsgs{height:240px;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;}
+.msg{max-width:85%;}
+.mai{align-self:flex-start;}
+.muser{align-self:flex-end;}
+.mbub{padding:10px 13px;border-radius:16px;font-size:13px;line-height:1.5;}
+.mai .mbub{background:var(--lav);color:var(--text);border-bottom-left-radius:4px;}
+.muser .mbub{background:var(--text);color:white;border-bottom-right-radius:4px;}
+.mtime{font-size:10px;color:var(--xs);margin-top:3px;padding:0 4px;}
+.mai .mtime{text-align:left;}
+.muser .mtime{text-align:right;}
+.dots{display:flex;gap:4px;align-items:center;padding:10px 12px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--lav-d);animation:bop 1.2s infinite;}
+.dot:nth-child(2){animation-delay:.2s;}
+.dot:nth-child(3){animation-delay:.4s;}
+@keyframes bop{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.chatinput{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);background:var(--bg);}
+.chatinput input{flex:1;border-radius:20px;padding:9px 14px;font-size:14px;}
+.csend{border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;flex-shrink:0;color:white;}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 12px 4px;scrollbar-width:none;}
+.chips::-webkit-scrollbar{display:none;}
+.chip{flex-shrink:0;background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--text);white-space:nowrap;}
+
+/* PALETA */
+.prow{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 12px;}
+.sw{text-align:center;}
+.swc{width:42px;height:42px;border-radius:50%;border:2px solid var(--border);cursor:pointer;}
+.swl{font-size:10px;color:var(--soft);max-width:42px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:3px;}
+
+/* VISION */
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px;}
+.vcard{background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;}
+.vimg{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+.vph{width:100%;aspect-ratio:1;background:linear-gradient(135deg,var(--rose),var(--lav));display:flex;align-items:center;justify-content:center;font-size:32px;}
+.vinfo{padding:10px 12px;}
+.vtitle{font-size:13px;font-weight:500;}
+.vdesc{font-size:11px;color:var(--soft);margin-top:3px;line-height:1.4;}
+.vmenu-wrap{position:absolute;top:8px;right:8px;}
+.vmenu-btn{background:rgba(255,255,255,0.85);backdrop-filter:blur(6px);border:none;border-radius:50%;width:24px;height:24px;font-size:14px;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--soft);box-shadow:0 1px 4px rgba(0,0,0,0.1);line-height:0;}
+.vmenu-dropdown{display:none;position:absolute;top:28px;right:0;background:var(--white);border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.12);border:1px solid var(--border);overflow:hidden;min-width:110px;z-index:10;}
+.vmenu-dropdown.open{display:block;}
+.vmenu-item{display:flex;align-items:center;gap:6px;padding:9px 12px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text);cursor:pointer;background:none;border:none;width:100%;text-align:left;}
+.vmenu-item:hover{background:var(--bg);}
+.vmenu-item.danger{color:var(--rose-d);}
+
+/* BUSCADOR IMAGENES */
+.img-search-wrap{background:var(--white);border-radius:var(--r);padding:14px;margin:0 16px 13px;box-shadow:var(--shadow);border:1px solid var(--border);}
+.img-results{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;max-height:260px;overflow-y:auto;}
+.img-result{width:100%;height:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;display:block;}
+.img-result:hover{border-color:var(--lav-d);}
+.img-result.sel{border-color:var(--lav-d);}
+
+/* MODAL EDIT */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:500;display:flex;align-items:flex-end;justify-content:center;}
+.modal-box{background:var(--white);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-width:600px;max-height:85vh;overflow-y:auto;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;margin-bottom:16px;}
+.modal-close{float:right;background:none;border:none;font-size:22px;cursor:pointer;color:var(--soft);}
+
+/* CALENDARIO */
+.mstrip{display:flex;gap:6px;overflow-x:auto;padding:14px 16px 8px;scrollbar-width:none;}
+.mstrip::-webkit-scrollbar{display:none;}
+.mchip{flex-shrink:0;border:none;border-radius:20px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:var(--border);color:var(--soft);}
+.mchip.on{background:var(--text);color:white;}
+.calnav{display:flex;align-items:center;justify-content:space-between;margin:0 16px 12px;}
+.caltitle{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;}
+.calnavbtn{background:none;border:none;font-size:22px;cursor:pointer;color:var(--soft);padding:4px 10px;}
+.calstripe{height:4px;border-radius:20px;margin:0 16px 12px;}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:0 16px 14px;}
+.cdlbl{text-align:center;font-size:11px;font-weight:500;color:var(--soft);padding:4px 0;}
+.cc{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:13px;cursor:pointer;position:relative;}
+.cc.today{background:var(--rose);color:var(--rose-d);font-weight:600;}
+.cc.hasev::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--lav-d);}
+.cc.sel{outline:2px solid var(--lav-d);}
+.cc.emp{pointer-events:none;}
+.evitem{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--white);border-radius:14px;margin:0 16px 8px;box-shadow:var(--shadow);border:1px solid var(--border);}
+.evdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.evbody{flex:1;}
+.evtitle{font-size:14px;font-weight:500;}
+.evdate{font-size:11px;color:var(--soft);margin-top:2px;}
+
+/* COMPRAS */
+.wcard{background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);margin:0 16px 12px;display:flex;}
+.wimg{width:88px;height:108px;object-fit:cover;display:block;flex-shrink:0;}
+.wiph{width:88px;height:108px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;}
+.wbody{flex:1;padding:12px 13px;position:relative;min-width:0;}
+.wname{font-size:14px;font-weight:500;margin-bottom:3px;}
+.wsub{font-size:12px;color:var(--soft);}
+.wprice{font-size:13px;font-weight:600;color:var(--sage-d);margin-top:4px;}
+.wdel{position:absolute;top:10px;right:10px;background:none;border:none;cursor:pointer;color:var(--xs);font-size:17px;}
+
+/* LUGARES */
+.lgcard{background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);margin:0 16px 12px;}
+.lgimg{width:100%;height:150px;object-fit:cover;display:block;}
+.lgph{width:100%;height:150px;display:flex;align-items:center;justify-content:center;font-size:40px;}
+.lgbody{padding:13px;position:relative;}
+.lgname{font-size:15px;font-weight:500;margin-bottom:4px;}
+.lgdir{font-size:12px;color:var(--soft);}
+.lgnota{font-size:13px;line-height:1.4;margin-top:6px;}
+.lgdel{position:absolute;top:12px;right:12px;background:none;border:none;cursor:pointer;color:var(--xs);font-size:18px;}
+
+/* FINANZAS */
+.fin-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px;margin-bottom:13px;}
+.fin-summary-card{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);border:1px solid var(--border);text-align:center;}
+.fin-summary-label{font-size:11px;color:var(--soft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.fin-summary-value{font-size:20px;font-weight:600;}
+.fin-summary-value.pos{color:var(--sage-d);}
+.fin-summary-value.neg{color:var(--rose-d);}
+.fin-tabs{display:flex;gap:8px;padding:0 16px 14px;}
+.fin-tab{flex:1;border:none;border-radius:12px;padding:10px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;background:var(--border);color:var(--soft);text-align:center;}
+.fin-tab.on{background:var(--text);color:white;}
+.fin-sub{display:none;}
+.fin-sub.on{display:block;}
+.mov-item{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--white);border-radius:14px;margin:0 16px 8px;box-shadow:var(--shadow);border:1px solid var(--border);}
+.mov-ic{font-size:20px;flex-shrink:0;}
+.mov-body{flex:1;min-width:0;}
+.mov-cat{font-size:14px;font-weight:500;}
+.mov-date{font-size:11px;color:var(--soft);margin-top:2px;}
+.mov-amt{font-size:14px;font-weight:600;flex-shrink:0;}
+.mov-amt.gasto{color:var(--rose-d);}
+.mov-amt.ingreso{color:var(--sage-d);}
+.chart-bars{display:flex;align-items:flex-end;gap:8px;height:140px;padding:10px 4px 0;}
+.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.chart-bar{width:100%;border-radius:6px 6px 0 0;min-height:4px;}
+.chart-bar-lbl{font-size:10px;color:var(--soft);text-align:center;}
+.goal-card{background:var(--white);border-radius:var(--r);padding:16px;margin:0 16px 12px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;}
+.goal-name{font-size:14px;font-weight:500;margin-bottom:6px;}
+.goal-bar-bg{background:var(--border);border-radius:20px;height:10px;overflow:hidden;margin-bottom:6px;}
+.goal-bar-fill{background:linear-gradient(90deg,var(--sage),var(--sage-d));height:100%;border-radius:20px;}
+.goal-nums{font-size:12px;color:var(--soft);display:flex;justify-content:space-between;}
+.goal-del{position:absolute;top:12px;right:12px;background:none;border:none;cursor:pointer;color:var(--xs);font-size:18px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen" class="login-screen">
+  <div class="login-box">
+    <div class="login-title">Mi Mundo 🌸</div>
+    <div class="login-sub">Tu espacio personal</div>
+    <div class="login-tabs">
+      <button class="login-tab on" id="lt-login" onclick="switchAuth('login')">Entrar</button>
+      <button class="login-tab" id="lt-reg" onclick="switchAuth('reg')">Registrarse</button>
+    </div>
+    <input type="text" id="auth-user" class="login-input" placeholder="Tu nombre de usuario..." />
+    <input type="password" id="auth-pass" class="login-input" placeholder="Contraseña..." />
+    <input type="password" id="auth-pass2" class="login-input" placeholder="Confirmar contraseña..." style="display:none" />
+    <select id="auth-question" class="login-input" style="display:none">
+      <option value="mascota">¿Nombre de tu primera mascota?</option>
+      <option value="ciudad">¿Ciudad donde naciste?</option>
+      <option value="colegio">¿Nombre de tu colegio?</option>
+      <option value="comida">¿Tu comida favorita?</option>
+    </select>
+    <input type="text" id="auth-answer" class="login-input" placeholder="Tu respuesta..." style="display:none" />
+    <button class="login-btn" onclick="doAuth()">Entrar</button>
+    <div class="login-err" id="auth-err"></div>
+    <div id="forgot-link" style="text-align:center;margin-top:6px"><a href="#" onclick="showForgot();return false;" style="font-size:12px;color:var(--lav-d);text-decoration:none">¿Olvidaste tu contraseña?</a></div>
+    <div class="login-note">Tus datos se guardan en este dispositivo.<br>Usa el mismo usuario y contraseña en cada dispositivo.</div>
+
+    <!-- FORGOT PASSWORD FLOW -->
+    <div id="forgot-box" style="display:none">
+      <div style="font-size:13px;color:var(--soft);text-align:center;margin-bottom:14px">Responde tu pregunta de seguridad para crear una nueva contraseña</div>
+      <input type="text" id="forgot-user" class="login-input" placeholder="Tu nombre de usuario..." />
+      <button class="btn-outline login-input" style="cursor:pointer;text-align:center" onclick="loadForgotQuestion()">Continuar</button>
+      <div id="forgot-q-section" style="display:none;margin-top:10px">
+        <div id="forgot-question-text" style="font-size:13px;font-weight:500;margin-bottom:8px"></div>
+        <input type="text" id="forgot-answer" class="login-input" placeholder="Tu respuesta..." />
+        <input type="password" id="forgot-newpass" class="login-input" placeholder="Nueva contraseña..." />
+        <button class="login-btn" onclick="resetPassword()">Restablecer contraseña</button>
+      </div>
+      <div class="login-err" id="forgot-err"></div>
+      <div style="text-align:center;margin-top:10px"><a href="#" onclick="hideForgot();return false;" style="font-size:12px;color:var(--soft);text-decoration:none">← Volver a entrar</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- INICIO -->
+<div class="pg on" id="pg-inicio">
+  <div class="ihero">
+    <div class="igreet" id="greet">Hola ✨</div>
+    <div class="idate" id="hoydate"></div>
+    <div class="iuser" id="iuser"></div>
+  </div>
+  <div id="alertbox"></div>
+  <div class="accesos">
+    <div class="ac" onclick="ir('compras')"><div class="ac-ic">🛍️</div><div class="ac-nm">Compras</div><div class="ac-sub">Wishlist con fotos</div></div>
+    <div class="ac" onclick="ir('estilo')"><div class="ac-ic">👗</div><div class="ac-nm">Estilo</div><div class="ac-sub">Outfits + estilista</div></div>
+    <div class="ac" onclick="ir('vision')"><div class="ac-ic">🌸</div><div class="ac-nm">Vision Board</div><div class="ac-sub">Fotos e inspiración</div></div>
+    <div class="ac" onclick="ir('cal')"><div class="ac-ic">📅</div><div class="ac-nm">Calendario</div><div class="ac-sub">Planificador + IA</div></div>
+    <div class="ac" onclick="ir('lugares')" style="grid-column:span 2"><div class="ac-ic">📍</div><div class="ac-nm">Lugares</div><div class="ac-sub">Sitios y direcciones</div></div>
+  </div>
+  <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+</div>
+
+<!-- COMPRAS -->
+<div class="pg" id="pg-compras">
+  <div class="hero" style="background:linear-gradient(135deg,var(--peach),var(--butter))">
+    <h1>Quiero comprar 🛍️</h1><p>Tiendas, precios y dónde encontrarlo</p>
+  </div>
+  <div class="card">
+    <div class="clabel">+ Nuevo ítem</div>
+    <div class="row"><input type="text" id="wnom" placeholder="¿Qué quieres?..." /></div>
+    <div class="row"><input type="text" id="wloc" placeholder="Tienda o local..." /></div>
+    <div class="row"><input type="text" id="wdir" placeholder="Dirección o link..." /></div>
+    <div class="row"><input type="text" id="wpre" placeholder="Precio aprox..." /></div>
+    <div class="row" style="align-items:center">
+      <label class="fbtn" for="wfoto">📷 Foto</label>
+      <input type="file" id="wfoto" accept="image/*" onchange="prevFoto(event,'wprev','wfnm','w')">
+      <span id="wfnm" style="font-size:12px;color:var(--soft);flex:1;padding-left:8px">Sin foto</span>
+    </div>
+    <img id="wprev" style="display:none;width:100%;border-radius:12px;margin-bottom:10px;max-height:150px;object-fit:cover">
+    <div class="row" style="justify-content:flex-end"><button class="btn btn-sm" onclick="addWish()">Guardar</button></div>
+  </div>
+  <div id="wlist"></div>
+</div>
+
+<!-- ESTILO -->
+<div class="pg" id="pg-estilo">
+  <div class="hero" style="background:linear-gradient(135deg,var(--lav),var(--rose))">
+    <h1>Mi estilo 👗</h1><p>Outfits, estilista IA y colores</p>
+  </div>
+  <div class="stabs">
+    <button class="stab on" onclick="stab('outfits',this)">👗 Outfits</button>
+    <button class="stab" onclick="stab('estilista',this)">🪞 Estilista</button>
+    <button class="stab" onclick="stab('paleta',this)">🎨 Paleta</button>
+  </div>
+  <div class="ssub on" id="ss-outfits">
+    <div class="card" style="margin:0 0 13px">
+      <div class="clabel">+ Nuevo outfit</div>
+      <div class="row"><input type="text" id="onom" placeholder="Nombre del outfit..." /></div>
+      <div class="row"><input type="text" id="odesc" placeholder="Descripción (ej: jeans + blusa blanca)..." /></div>
+      <div class="row">
+        <select id="ooc">
+          <option value="casual">☕ Casual</option>
+          <option value="trabajo">💼 Trabajo</option>
+          <option value="elegante">✨ Elegante</option>
+          <option value="deporte">🏃 Deporte</option>
+          <option value="salida">🌙 Salida</option>
+        </select>
+      </div>
+      <div class="row" style="align-items:center">
+        <label class="fbtn" for="ofoto">📷 Foto</label>
+        <input type="file" id="ofoto" accept="image/*" onchange="prevFoto(event,'oprev','ofnm','o')">
+        <span id="ofnm" style="font-size:12px;color:var(--soft);flex:1;padding-left:8px">Sin foto</span>
+      </div>
+      <img id="oprev" style="display:none;width:100%;border-radius:12px;margin-bottom:10px;max-height:180px;object-fit:cover">
+      <div class="row" style="justify-content:flex-end"><button class="btn btn-sm" onclick="addOutfit()">Guardar</button></div>
+    </div>
+    <div id="ogrid" class="ogrid"></div>
+  </div>
+  <div class="ssub" id="ss-estilista">
+    <div class="chatbox">
+      <div class="chatheader" style="background:linear-gradient(135deg,var(--lav),var(--rose))">
+        <span style="font-size:22px">🪞</span>
+        <div><div class="chname">Estilista IA</div><div class="chsub">Powered by Gemini ✨</div></div>
+      </div>
+      <div class="chips">
+        <div class="chip" onclick="qstyle('¿Qué outfit me recomiendas para hoy?')">✨ ¿Qué me pongo?</div>
+        <div class="chip" onclick="qstyle('Tengo una cena elegante, ¿qué me recomiendas?')">🍽️ Cena elegante</div>
+        <div class="chip" onclick="qstyle('Quiero un look casual y cómodo')">☕ Casual</div>
+        <div class="chip" onclick="qstyle('¿Cómo aprovecho mi paleta de colores?')">🎨 Mi paleta</div>
+        <div class="chip" onclick="qstyle('Arma un look completo para mí')">💅 Look completo</div>
+      </div>
+      <div class="chatmsgs" id="smsgs"></div>
+      <div class="chatinput">
+        <input type="text" id="sinput" placeholder="Pregúntale a tu estilista..." onkeydown="if(event.key==='Enter')sendStyle()">
+        <button class="csend" style="background:var(--lav-d)" onclick="sendStyle()">➤</button>
+      </div>
+    </div>
+  </div>
+  <div class="ssub" id="ss-paleta">
+    <div class="card" style="margin:0 0 13px">
+      <div class="clabel">🎨 Mi paleta</div>
+      <div class="prow" id="paldis"><div style="font-size:12px;color:var(--soft)">Agrega tus colores</div></div>
+      <div class="row" style="align-items:center;margin-top:6px">
+        <input type="color" id="cpick" value="#DDD5F0">
+        <input type="text" id="cnom" placeholder="Nombre del color...">
+        <button class="btn btn-sm" onclick="addColor()">+</button>
+      </div>
+    </div>
+    <div class="card" style="margin:0 0 13px">
+      <div class="clabel">🚫 Colores a evitar</div>
+      <div class="prow" id="evdis"><div style="font-size:12px;color:var(--soft)">Colores que no te favorecen</div></div>
+      <div class="row" style="align-items:center;margin-top:6px">
+        <input type="color" id="epick" value="#FF6B35">
+        <input type="text" id="enom" placeholder="Nombre del color...">
+        <button class="btn btn-sm btn-outline" onclick="addEvitar()">+</button>
+      </div>
+    </div>
+    <div class="card" style="margin:0 0 13px">
+      <div class="clabel">📝 Notas de colorimetría</div>
+      <textarea id="cnotas" rows="4" placeholder="Ej: Temporada Verano Claro. Me favorecen colores fríos..." onblur="S.cnotas=this.value;save()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- VISION -->
+<div class="pg" id="pg-vision">
+  <div class="hero" style="background:linear-gradient(135deg,var(--rose),var(--lav))">
+    <h1>Vision Board 🌸</h1><p>Tus sueños y metas</p>
+  </div>
+
+  <!-- BUSCADOR DE IMÁGENES -->
+  <div class="img-search-wrap">
+    <div class="clabel">🔍 Buscar imagen</div>
+    <div class="row">
+      <input type="text" id="imgsearch" placeholder="Ej: pasarela de moda, playa, París..." onkeydown="if(event.key==='Enter')buscarImagen()" />
+      <button class="btn btn-sm" onclick="buscarImagen()">Buscar</button>
+    </div>
+    <div id="img-results" class="img-results"></div>
+    <div id="img-sel-preview" style="display:none;margin-top:10px">
+      <img id="img-sel-img" style="width:100%;border-radius:12px;max-height:150px;object-fit:cover">
+      <div style="font-size:12px;color:var(--sage-d);margin-top:4px">✓ Imagen seleccionada — completa el formulario abajo</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="clabel">+ Nueva imagen</div>
+    <div class="row"><input type="text" id="vtit" placeholder="Título o meta..." /></div>
+    <div class="row"><textarea id="vdesc" rows="2" placeholder="Lo que quieres lograr..."></textarea></div>
+    <div class="row" style="align-items:center">
+      <label class="fbtn" for="vfoto">📷 O sube tu foto</label>
+      <input type="file" id="vfoto" accept="image/*" onchange="prevFoto(event,'vprev','vfnm','v')">
+      <span id="vfnm" style="font-size:12px;color:var(--soft);flex:1;padding-left:8px">Sin foto</span>
+    </div>
+    <img id="vprev" style="display:none;width:100%;border-radius:12px;margin-bottom:10px;max-height:170px;object-fit:cover">
+    <div class="row" style="justify-content:flex-end"><button class="btn btn-sm" onclick="addVision()">Guardar</button></div>
+  </div>
+  <div id="vgrid" class="vgrid"></div>
+</div>
+
+<!-- CALENDARIO -->
+<div class="pg" id="pg-cal">
+  <div class="hero" style="background:linear-gradient(135deg,var(--sky),var(--mint))">
+    <h1>Calendario 2026 📅</h1><p>Planificador de estudio con IA</p>
+  </div>
+  <div class="chatbox" style="margin:14px 16px 0">
+    <div class="chatheader" style="background:linear-gradient(135deg,var(--sky),var(--mint))">
+      <span style="font-size:20px">🧠</span>
+      <div><div class="chname">Planificadora IA</div><div class="chsub">Powered by Gemini ✨</div></div>
+    </div>
+    <div class="chips">
+      <div class="chip" onclick="qcal('¿Cómo me organizo para estudiar esta semana?')">📚 Esta semana</div>
+      <div class="chip" onclick="qcal('Tengo una prueba en 5 días, ¿cuánto estudio por día?')">⏰ Prueba en 5 días</div>
+      <div class="chip" onclick="qcal('Tengo dos pruebas seguidas, ¿cómo me organizo?')">📝 Dos pruebas</div>
+    </div>
+    <div class="chatmsgs" id="cmsgs"></div>
+    <div class="chatinput">
+      <input type="text" id="cinput" placeholder="Pregunta cómo organizar tu estudio..." onkeydown="if(event.key==='Enter')sendCal()">
+      <button class="csend" style="background:var(--mint-d)" onclick="sendCal()">➤</button>
+    </div>
+  </div>
+  <div class="mstrip" id="mstrip"></div>
+  <div class="calstripe" id="calstripe"></div>
+  <div class="calnav">
+    <button class="calnavbtn" onclick="prevMes()">‹</button>
+    <div class="caltitle" id="caltitle"></div>
+    <button class="calnavbtn" onclick="nextMes()">›</button>
+  </div>
+  <div class="calgrid" id="calgrid"></div>
+  <div class="card">
+    <div class="clabel">+ Agregar evento o prueba</div>
+    <div class="row"><input type="text" id="evtit" placeholder="Nombre del evento o prueba..." /></div>
+    <div class="row">
+      <input type="date" id="evfec" style="flex:1">
+      <select id="evcolor" style="flex:0 0 auto;width:auto">
+        <option value="#F2D5D5">🩷 Rosa</option>
+        <option value="#DDD5F0">💜 Lavanda</option>
+        <option value="#D5E8F2">💙 Cielo</option>
+        <option value="#D5F0E8">💚 Menta</option>
+        <option value="#F7F2D8">💛 Mantequilla</option>
+      </select>
+    </div>
+    <div class="row" style="justify-content:flex-end"><button class="btn btn-sm" onclick="addEv()">Guardar evento</button></div>
+  </div>
+  <div id="evlist"></div>
+</div>
+
+
+<!-- FINANZAS -->
+<div class="pg" id="pg-finanzas">
+  <div class="hero" style="background:linear-gradient(135deg,var(--sage),var(--butter))">
+    <h1>Mis Finanzas 💰</h1><p>Controla tus gastos e ingresos</p>
+  </div>
+
+  <div class="fin-summary-grid">
+    <div class="fin-summary-card">
+      <div class="fin-summary-label">Ingresos del mes</div>
+      <div class="fin-summary-value pos" id="fin-ingresos">$0</div>
+    </div>
+    <div class="fin-summary-card">
+      <div class="fin-summary-label">Gastos del mes</div>
+      <div class="fin-summary-value neg" id="fin-gastos">$0</div>
+    </div>
+    <div class="fin-summary-card" style="grid-column:span 2">
+      <div class="fin-summary-label">Balance del mes</div>
+      <div class="fin-summary-value" id="fin-balance">$0</div>
+    </div>
+  </div>
+
+  <div class="fin-tabs">
+    <button class="fin-tab on" onclick="finTab('mov',this)">📋 Movimientos</button>
+    <button class="fin-tab" onclick="finTab('graf',this)">📊 Gráficos</button>
+    <button class="fin-tab" onclick="finTab('metas',this)">🎯 Metas</button>
+    <button class="fin-tab" onclick="finTab('consejera',this)">🤖 Consejera</button>
+  </div>
+
+  <!-- MOVIMIENTOS -->
+  <div class="fin-sub on" id="fs-mov">
+    <div class="card" style="margin:0 16px 13px">
+      <div class="clabel">+ Nuevo movimiento</div>
+      <div class="row">
+        <select id="mov-tipo" onchange="toggleMovCat()">
+          <option value="gasto">💸 Gasto</option>
+          <option value="ingreso">💵 Ingreso</option>
+        </select>
+      </div>
+      <div class="row" id="mov-cat-row">
+        <select id="mov-cat">
+          <option value="comida">🍔 Comida</option>
+          <option value="transporte">🚌 Transporte</option>
+          <option value="ropa">👗 Ropa</option>
+          <option value="salud">💊 Salud</option>
+          <option value="entretenimiento">🎬 Entretenimiento</option>
+          <option value="estudios">📚 Estudios</option>
+          <option value="hogar">🏠 Hogar</option>
+          <option value="otro">✨ Otro</option>
+        </select>
+      </div>
+      <div class="row"><input type="text" id="mov-monto" placeholder="Monto (ej: 5000)..." /></div>
+      <div class="row"><input type="text" id="mov-nota" placeholder="Detalle (opcional)..." /></div>
+      <div class="row" style="justify-content:flex-end"><button class="btn btn-sm" onclick="addMov()">Guardar</button></div>
+    </div>
+    <div id="mov-list"></div>
+  </div>
+
+  <!-- GRAFICOS -->
+  <div class="fin-sub" id="fs-graf">
+    <div class="card" style="margin:0 16px 13px">
+      <div class="clabel">📊 Gastos por categoría (este mes)</div>
+      <div class="chart-bars" id="chart-cats"></div>
+    </div>
+    <div class="card" style="margin:0 16px 13px">
+      <div class="clabel">📈 Ingresos vs Gastos</div>
+      <div class="chart-bars" id="chart-igv"></div>
+    </div>
+  </div>
+
+  <!-- METAS -->
+  <div class="fin-sub" id="fs-metas">
+    <div class="card" style="margin:0 16px 13px">
+      <div class="clabel">+ Nueva meta de ahorro</div>
+      <div class="row"><input type="text" id="goal-nombre" placeholder="Nombre de la meta (ej: Viaje, Notebook)..." /></div>
+      <div class="row"><input type="text" id="goal-monto" placeholder="Monto objetivo (ej: 100000)..." /></div>
+      <div class="row" style="justify-content:flex-end"><button class="btn btn-sm" onclick="addGoal()">Crear meta</button></div>
+    </div>
+    <div id="goals-list"></div>
+  </div>
+
+  <!-- CONSEJERA IA -->
+  <div class="fin-sub" id="fs-consejera">
+    <div class="chatbox" style="margin:0 16px 13px">
+      <div class="chatheader" style="background:linear-gradient(135deg,var(--sage),var(--butter))">
+        <span style="font-size:22px">💰</span>
+        <div><div class="chname">Consejera Financiera IA</div><div class="chsub">Powered by Groq ✨</div></div>
+      </div>
+      <div class="chips">
+        <div class="chip" onclick="qfin('¿Cómo voy este mes con mis gastos?')">📊 ¿Cómo voy este mes?</div>
+        <div class="chip" onclick="qfin('¿En qué estoy gastando de más?')">💸 ¿Gasto de más?</div>
+        <div class="chip" onclick="qfin('Dame consejos para ahorrar más')">🎯 Consejos de ahorro</div>
+        <div class="chip" onclick="qfin('¿Puedo cumplir mis metas de ahorro?')">✅ ¿Cumplo mis metas?</div>
+      </div>
+      <div class="chatmsgs" id="finmsgs"></div>
+      <div class="chatinput">
+        <input type="text" id="fininput" placeholder="Pregúntale a tu consejera..." onkeydown="if(event.key==='Enter')sendFin()">
+        <button class="csend" style="background:var(--sage-d)" onclick="sendFin()">➤</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LUGARES -->
+<div class="pg" id="pg-lugares">
+  <div class="hero" style="background:linear-gradient(135deg,var(--sage),var(--mint))">
+    <h1>Lugares 📍</h1><p>Sitios donde quieres ir o comprar</p>
+  </div>
+  <div class="card">
+    <div class="clabel">+ Nuevo lugar</div>
+    <div class="row"><input type="text" id="lgnom" placeholder="Nombre del lugar..." /></div>
+    <div class="row"><input type="text" id="lgdir" placeholder="Dirección..." /></div>
+    <div class="row"><input type="url" id="lglink" placeholder="Link (opcional)..." /></div>
+    <div class="row"><textarea id="lgnota" rows="2" placeholder="Nota (ej: tienen polerones baratos)..."></textarea></div>
+    <div class="row" style="align-items:center">
+      <label class="fbtn" for="lgfoto">📷 Foto</label>
+      <input type="file" id="lgfoto" accept="image/*" onchange="prevFoto(event,'lgprev','lgfnm','lg')">
+      <span id="lgfnm" style="font-size:12px;color:var(--soft);flex:1;padding-left:8px">Sin foto</span>
+    </div>
+    <img id="lgprev" style="display:none;width:100%;border-radius:12px;margin-bottom:10px;max-height:150px;object-fit:cover">
+    <div class="row" style="justify-content:flex-end"><button class="btn btn-sm" onclick="addLugar()">Guardar lugar</button></div>
+  </div>
+  <div id="lglist"></div>
+</div>
+
+<!-- MODAL EDITAR VISION -->
+<div id="modal-bg" class="modal-bg" style="display:none" onclick="closeModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-title">Editar 🌸</div>
+    <input type="hidden" id="edit-id">
+    <div class="row"><input type="text" id="edit-tit" placeholder="Título o meta..." /></div>
+    <div class="row"><textarea id="edit-desc" rows="3" placeholder="Descripción..."></textarea></div>
+    <div class="row" style="align-items:center">
+      <label class="fbtn" for="edit-foto">📷 Cambiar foto</label>
+      <input type="file" id="edit-foto" accept="image/*" onchange="prevFoto(event,'edit-prev','edit-fnm','edit')">
+      <span id="edit-fnm" style="font-size:12px;color:var(--soft);flex:1;padding-left:8px">Sin cambio</span>
+    </div>
+    <img id="edit-prev" style="display:none;width:100%;border-radius:12px;margin-bottom:10px;max-height:150px;object-fit:cover">
+    <button class="btn" style="width:100%;margin-top:8px" onclick="saveEdit()">Guardar cambios</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nb on" id="nb-inicio" onclick="ir('inicio')"><span>🏠</span><span>Inicio</span></button>
+  <button class="nb" id="nb-compras" onclick="ir('compras')"><span>🛍️</span><span>Compras</span></button>
+  <button class="nb" id="nb-estilo" onclick="ir('estilo')"><span>👗</span><span>Estilo</span></button>
+  <button class="nb" id="nb-vision" onclick="ir('vision')"><span>🌸</span><span>Vision</span></button>
+  <button class="nb" id="nb-cal" onclick="ir('cal')"><span>📅</span><span>Calendario</span></button>
+  <button class="nb" id="nb-lugares" onclick="ir('lugares')"><span>📍</span><span>Lugares</span></button>
+  <button class="nb" id="nb-finanzas" onclick="ir('finanzas')"><span>💰</span><span>Finanzas</span></button>
+</nav>
+
+<script>
+// Groq key now stored securely in Netlify environment variables
+var curUser = null;
+var S = {};
+var fotos = {w:null,o:null,v:null,lg:null,edit:null};
+var selImgUrl = null;
+
+// ══ AUTH ══
+function getUsers(){try{return JSON.parse(localStorage.getItem('mm-users')||'{}');}catch(e){return {};}}
+function saveUsers(u){localStorage.setItem('mm-users',JSON.stringify(u));}
+
+function switchAuth(mode){
+  var isReg = mode==='reg';
+  document.getElementById('lt-login').className='login-tab'+(isReg?'':' on');
+  document.getElementById('lt-reg').className='login-tab'+(isReg?' on':'');
+  document.getElementById('auth-pass2').style.display=isReg?'block':'none';
+  document.getElementById('auth-question').style.display=isReg?'block':'none';
+  document.getElementById('auth-answer').style.display=isReg?'block':'none';
+  document.getElementById('forgot-link').style.display=isReg?'none':'block';
+  document.querySelector('.login-btn').textContent=isReg?'Registrarse':'Entrar';
+  document.querySelector('.login-btn').onclick=isReg?doRegister:doLogin;
+}
+
+function showForgot(){
+  document.querySelector('.login-tabs').style.display='none';
+  document.getElementById('auth-user').style.display='none';
+  document.getElementById('auth-pass').style.display='none';
+  document.querySelector('.login-btn').style.display='none';
+  document.getElementById('forgot-link').style.display='none';
+  document.getElementById('forgot-box').style.display='block';
+  document.getElementById('forgot-err').textContent='';
+}
+function hideForgot(){
+  document.querySelector('.login-tabs').style.display='flex';
+  document.getElementById('auth-user').style.display='block';
+  document.getElementById('auth-pass').style.display='block';
+  document.querySelector('.login-btn').style.display='block';
+  document.getElementById('forgot-link').style.display='block';
+  document.getElementById('forgot-box').style.display='none';
+  document.getElementById('forgot-q-section').style.display='none';
+  document.getElementById('auth-err').textContent='';
+}
+function loadForgotQuestion(){
+  var user=document.getElementById('forgot-user').value.trim().toLowerCase();
+  var err=document.getElementById('forgot-err');
+  if(!user){err.textContent='Escribe tu usuario';return;}
+  var users=getUsers();
+  if(!users[user]){err.textContent='Usuario no encontrado';return;}
+  if(!users[user].question){err.textContent='Esta cuenta no tiene pregunta de seguridad configurada';return;}
+  err.textContent='';
+  var qLabels={mascota:'¿Nombre de tu primera mascota?',ciudad:'¿Ciudad donde naciste?',colegio:'¿Nombre de tu colegio?',comida:'¿Tu comida favorita?'};
+  document.getElementById('forgot-question-text').textContent=qLabels[users[user].question]||users[user].question;
+  document.getElementById('forgot-q-section').style.display='block';
+}
+function resetPassword(){
+  var user=document.getElementById('forgot-user').value.trim().toLowerCase();
+  var answer=document.getElementById('forgot-answer').value.trim().toLowerCase();
+  var newpass=document.getElementById('forgot-newpass').value;
+  var err=document.getElementById('forgot-err');
+  var users=getUsers();
+  if(!users[user]){err.textContent='Usuario no encontrado';return;}
+  if((users[user].answer||'').toLowerCase()!==answer){err.textContent='Respuesta incorrecta';return;}
+  if(!newpass||newpass.length<3){err.textContent='La nueva contraseña es muy corta';return;}
+  users[user].pass=btoa(newpass);
+  saveUsers(users);
+  err.style.color='var(--sage-d)';
+  err.textContent='¡Contraseña actualizada! Ya puedes entrar.';
+  setTimeout(function(){
+    hideForgot();
+    document.getElementById('auth-user').value=user;
+    document.getElementById('auth-pass').value='';
+  },1500);
+}
+
+function doAuth(){doLogin();}
+
+function doLogin(){
+  var user=document.getElementById('auth-user').value.trim().toLowerCase();
+  var pass=document.getElementById('auth-pass').value;
+  var err=document.getElementById('auth-err');
+  if(!user||!pass){err.textContent='Completa todos los campos';return;}
+  var users=getUsers();
+  if(!users[user]){err.textContent='Usuario no encontrado';return;}
+  if(users[user].pass!==btoa(pass)){err.textContent='Contraseña incorrecta';return;}
+  curUser=user;
+  localStorage.setItem('mm-session',user);
+  loadUserData();
+  document.getElementById('login-screen').style.display='none';
+  initInicio();
+}
+
+function doRegister(){
+  var user=document.getElementById('auth-user').value.trim().toLowerCase();
+  var pass=document.getElementById('auth-pass').value;
+  var pass2=document.getElementById('auth-pass2').value;
+  var question=document.getElementById('auth-question').value;
+  var answer=document.getElementById('auth-answer').value.trim();
+  var err=document.getElementById('auth-err');
+  if(!user||!pass){err.textContent='Completa todos los campos';return;}
+  if(pass!==pass2){err.textContent='Las contraseñas no coinciden';return;}
+  if(user.length<3){err.textContent='El usuario debe tener al menos 3 caracteres';return;}
+  if(!answer){err.textContent='Completa la respuesta de seguridad';return;}
+  var users=getUsers();
+  if(users[user]){err.textContent='Ese usuario ya existe';return;}
+  users[user]={pass:btoa(pass),question:question,answer:answer.toLowerCase(),data:defaultData()};
+  saveUsers(users);
+  curUser=user;
+  localStorage.setItem('mm-session',user);
+  loadUserData();
+  document.getElementById('login-screen').style.display='none';
+  initInicio();
+}
+
+function logout(){
+  localStorage.removeItem('mm-session');
+  curUser=null; S={};
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('auth-user').value='';
+  document.getElementById('auth-pass').value='';
+  document.getElementById('auth-err').textContent='';
+}
+
+function defaultData(){return {wish:[],outfits:[],vision:[],eventos:[],lugares:[],colores:[],evitar:[],cnotas:'',sh:[],ch:[],movs:[],goals:[],fh:[]};}
+
+function loadUserData(){
+  var users=getUsers();
+  if(users[curUser]){S=users[curUser].data||defaultData();}
+  else{S=defaultData();}
+}
+
+function save(){
+  if(!curUser)return;
+  var users=getUsers();
+  if(!users[curUser])users[curUser]={pass:'',data:S};
+  else users[curUser].data=S;
+  saveUsers(users);
+}
+
+// Auto-login
+function checkSession(){
+  var sess=localStorage.getItem('mm-session');
+  if(sess){
+    var users=getUsers();
+    if(users[sess]){
+      curUser=sess;
+      loadUserData();
+      document.getElementById('login-screen').style.display='none';
+      initInicio();
+      return;
+    }
+  }
+}
+
+// ══ NAV ══
+function ir(pg){
+  var pages=['inicio','compras','estilo','vision','cal','lugares','finanzas'];
+  for(var i=0;i<pages.length;i++){
+    var el=document.getElementById('pg-'+pages[i]);
+    var nb=document.getElementById('nb-'+pages[i]);
+    if(el)el.className='pg'+(pages[i]===pg?' on':'');
+    if(nb)nb.className='nb'+(pages[i]===pg?' on':'');
+  }
+  if(pg==='cal')renderCal();
+  if(pg==='inicio')initInicio();
+  if(pg==='finanzas')renderFinanzas();
+}
+
+function stab(tab,btn){
+  var subs=['outfits','estilista','paleta'];
+  for(var i=0;i<subs.length;i++)document.getElementById('ss-'+subs[i]).className='ssub'+(subs[i]===tab?' on':'');
+  var btns=document.querySelectorAll('.stab');
+  for(var i=0;i<btns.length;i++)btns[i].className='stab'+(btns[i]===btn?' on':'');
+}
+
+// ══ FOTO ══
+function prevFoto(e,imgId,nmId,key){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    fotos[key]=ev.target.result;
+    var img=document.getElementById(imgId);
+    img.src=ev.target.result;img.style.display='block';
+    document.getElementById(nmId).textContent=file.name;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ══ INICIO ══
+function initInicio(){
+  var now=new Date();
+  var h=now.getHours();
+  var g=h<12?'Buenos días ☀️':h<19?'Buenas tardes 🌸':'Buenas noches 🌙';
+  document.getElementById('greet').textContent=g;
+  document.getElementById('hoydate').textContent=now.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  if(curUser)document.getElementById('iuser').textContent='Hola, '+curUser+' 💕';
+  var today=new Date();today.setHours(0,0,0,0);
+  var prox=(S.eventos||[]).filter(function(e){var d=new Date(e.fecha+'T12:00:00');d.setHours(0,0,0,0);var diff=Math.round((d-today)/86400000);return diff>=0&&diff<=5;});
+  var ab=document.getElementById('alertbox');
+  if(prox.length){
+    prox.sort(function(a,b){return a.fecha.localeCompare(b.fecha);});
+    var ev=prox[0];var d=new Date(ev.fecha+'T12:00:00');d.setHours(0,0,0,0);
+    var diff=Math.round((d-today)/86400000);
+    var msg=diff===0?'¡Es hoy!':diff===1?'¡Es mañana!':'En '+diff+' días';
+    ab.innerHTML='<div class="alert">⏰ <strong>'+ev.titulo+'</strong>'+msg+' — ¡recuerda planificar tu estudio!</div>';
+  }else{ab.innerHTML='';}
+}
+
+// ══ COMPRAS ══
+function addWish(){
+  var nom=document.getElementById('wnom').value.trim();if(!nom)return;
+  if(!S.wish)S.wish=[];
+  S.wish.unshift({id:Date.now(),nom:nom,loc:document.getElementById('wloc').value.trim(),dir:document.getElementById('wdir').value.trim(),pre:document.getElementById('wpre').value.trim(),foto:fotos.w});
+  ['wnom','wloc','wdir','wpre'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('wprev').style.display='none';document.getElementById('wfnm').textContent='Sin foto';
+  fotos.w=null;save();renderWish();
+}
+function delWish(id){S.wish=S.wish.filter(function(w){return w.id!==id;});save();renderWish();}
+function renderWish(){
+  var el=document.getElementById('wlist');
+  if(!(S.wish||[]).length){el.innerHTML='<div class="empty"><div class="eic">🛍️</div>Tu lista está vacía</div>';return;}
+  el.innerHTML=S.wish.map(function(w){return'<div class="wcard"><div class="wiph" style="background:linear-gradient(135deg,var(--peach),var(--butter))">'+(w.foto?'<img class="wimg" src="'+w.foto+'">':'🛍️')+'</div><div class="wbody"><button class="wdel" onclick="delWish('+w.id+')">×</button><div class="wname">'+w.nom+'</div>'+(w.loc?'<div class="wsub">🏪 '+w.loc+'</div>':'')+(w.dir?'<div class="wsub">📍 '+w.dir+'</div>':'')+(w.pre?'<div class="wprice">'+w.pre+'</div>':'')+'</div></div>';}).join('');
+}
+
+// ══ OUTFITS ══
+var ocE={casual:'☕',trabajo:'💼',elegante:'✨',deporte:'🏃',salida:'🌙'};
+var ocL={casual:'Casual',trabajo:'Trabajo',elegante:'Elegante',deporte:'Deporte',salida:'Salida'};
+function addOutfit(){
+  var nom=document.getElementById('onom').value.trim();if(!nom)return;
+  if(!S.outfits)S.outfits=[];
+  S.outfits.unshift({id:Date.now(),nom:nom,desc:document.getElementById('odesc').value.trim(),oc:document.getElementById('ooc').value,foto:fotos.o});
+  ['onom','odesc'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('oprev').style.display='none';document.getElementById('ofnm').textContent='Sin foto';
+  fotos.o=null;save();renderOutfits();
+}
+function delOutfit(id){S.outfits=S.outfits.filter(function(o){return o.id!==id;});save();renderOutfits();}
+function renderOutfits(){
+  var el=document.getElementById('ogrid');
+  if(!(S.outfits||[]).length){el.innerHTML='<div class="empty" style="grid-column:span 2"><div class="eic">👗</div>Agrega tu primer outfit</div>';return;}
+  el.innerHTML=S.outfits.map(function(o){return'<div class="ocard"><button class="odel" onclick="delOutfit('+o.id+')">×</button>'+(o.foto?'<img class="oimg" src="'+o.foto+'">':`<div class="oph">${ocE[o.oc]||'👗'}</div>`)+'<div class="oinfo"><div class="oname">'+o.nom+'</div><span class="otag">'+ocE[o.oc]+' '+ocL[o.oc]+'</span>'+(o.desc?'<div style="font-size:11px;color:var(--soft);margin-top:4px;line-height:1.4">'+o.desc+'</div>':'')+'</div></div>';}).join('');
+}
+
+// ══ PALETA ══
+function addColor(){var h=document.getElementById('cpick').value,n=document.getElementById('cnom').value.trim()||h;if(!S.colores)S.colores=[];S.colores.push({id:Date.now(),h:h,n:n});document.getElementById('cnom').value='';save();renderPal();}
+function delColor(id){if(!confirm('¿Eliminar este color de tu paleta?'))return;S.colores=S.colores.filter(function(c){return c.id!==id;});save();renderPal();}
+function renderPal(){var el=document.getElementById('paldis');if(!(S.colores||[]).length){el.innerHTML='<div style="font-size:12px;color:var(--soft)">Agrega tus colores</div>';return;}el.innerHTML=S.colores.map(function(c){return'<div class="sw"><div class="swc" style="background:'+c.h+'" onclick="delColor('+c.id+')"></div><div class="swl">'+c.n+'</div></div>';}).join('');}
+function addEvitar(){var h=document.getElementById('epick').value,n=document.getElementById('enom').value.trim()||h;if(!S.evitar)S.evitar=[];S.evitar.push({id:Date.now(),h:h,n:n});document.getElementById('enom').value='';save();renderEv();}
+function delEvitar(id){if(!confirm('¿Eliminar este color?'))return;S.evitar=S.evitar.filter(function(c){return c.id!==id;});save();renderEv();}
+function renderEv(){var el=document.getElementById('evdis');if(!(S.evitar||[]).length){el.innerHTML='<div style="font-size:12px;color:var(--soft)">Colores que no te favorecen</div>';return;}el.innerHTML=S.evitar.map(function(c){return'<div class="sw"><div class="swc" style="background:'+c.h+';opacity:.7" onclick="delEvitar('+c.id+')"></div><div class="swl">'+c.n+'</div></div>';}).join('');}
+
+// ══ VISION ══
+function buscarImagen(){
+  var q=document.getElementById('imgsearch').value.trim();if(!q)return;
+  var el=document.getElementById('img-results');
+  el.innerHTML='<div style="font-size:12px;color:var(--soft);padding:10px">Buscando...</div>';
+  fetch('/api/images?q='+encodeURIComponent(q)).then(function(r){return r.json();}).then(function(data){
+    if(!data.hits||!data.hits.length){el.innerHTML='<div style="font-size:12px;color:var(--soft);padding:10px">Sin resultados. Intenta otra búsqueda.</div>';return;}
+    el.innerHTML=data.hits.map(function(img){
+      return'<img class="img-result" src="'+img.webformatURL+'" data-full="'+img.largeImageURL+'" onclick="selImg(this)" loading="lazy">';
+    }).join('');
+  }).catch(function(){
+    el.innerHTML='<div style="font-size:12px;color:var(--soft);padding:10px">Error al buscar. Intenta de nuevo.</div>';
+  });
+}
+function selImg(el){
+  document.querySelectorAll('.img-result').forEach(function(i){i.classList.remove('sel');});
+  el.classList.add('sel');
+  selImgUrl=el.getAttribute('data-full');
+  var prev=document.getElementById('img-sel-preview');
+  document.getElementById('img-sel-img').src=selImgUrl;
+  prev.style.display='block';
+  fotos.v=selImgUrl;
+  document.getElementById('vprev').src=selImgUrl;
+  document.getElementById('vprev').style.display='block';
+}
+
+function addVision(){
+  var t=document.getElementById('vtit').value.trim();if(!t)return;
+  if(!S.vision)S.vision=[];
+  var fotoFinal=fotos.v||selImgUrl||null;
+  S.vision.unshift({id:Date.now(),t:t,d:document.getElementById('vdesc').value.trim(),foto:fotoFinal});
+  ['vtit','vdesc'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('vprev').style.display='none';document.getElementById('vfnm').textContent='Sin foto';
+  document.getElementById('img-sel-preview').style.display='none';
+  document.getElementById('img-results').innerHTML='';
+  document.getElementById('imgsearch').value='';
+  fotos.v=null;selImgUrl=null;
+  save();renderVision();
+}
+function delVision(id){S.vision=S.vision.filter(function(v){return v.id!==id;});save();renderVision();}
+function delVisionConfirm(id){if(!confirm('¿Eliminar esta imagen de tu Vision Board?'))return;delVision(id);}
+function editVision(id){
+  var v=S.vision.find(function(v){return v.id===id;});if(!v)return;
+  document.getElementById('edit-id').value=id;
+  document.getElementById('edit-tit').value=v.t||'';
+  document.getElementById('edit-desc').value=v.d||'';
+  document.getElementById('edit-prev').style.display='none';
+  document.getElementById('edit-fnm').textContent='Sin cambio';
+  fotos.edit=null;
+  document.getElementById('modal-bg').style.display='flex';
+}
+function saveEdit(){
+  var id=parseInt(document.getElementById('edit-id').value);
+  var v=S.vision.find(function(v){return v.id===id;});if(!v)return;
+  v.t=document.getElementById('edit-tit').value.trim()||v.t;
+  v.d=document.getElementById('edit-desc').value.trim();
+  if(fotos.edit)v.foto=fotos.edit;
+  save();renderVision();closeModal();
+}
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('modal-bg'))return;
+  document.getElementById('modal-bg').style.display='none';
+}
+function renderVision(){
+  var el=document.getElementById('vgrid');
+  if(!(S.vision||[]).length){el.innerHTML='<div class="empty" style="grid-column:span 2"><div class="eic">🌸</div>Agrega tu primera imagen</div>';return;}
+  el.innerHTML=S.vision.map(function(v){return'<div class="vcard">'+(v.foto?'<img class="vimg" src="'+v.foto+'">':`<div class="vph">🌸</div>`)+
+    '<div class="vmenu-wrap">'+
+      '<button class="vmenu-btn" onclick="toggleVMenu(event,'+v.id+')">⋯</button>'+
+      '<div class="vmenu-dropdown" id="vmenu-'+v.id+'">'+
+        '<button class="vmenu-item" onclick="editVision('+v.id+');closeVMenus()">✎ &nbsp;Editar</button>'+
+        '<button class="vmenu-item danger" onclick="delVisionConfirm('+v.id+');closeVMenus()">🗑 &nbsp;Eliminar</button>'+
+      '</div>'+
+    '</div>'+
+    '<div class="vinfo"><div class="vtitle">'+v.t+'</div>'+(v.d?'<div class="vdesc">'+v.d+'</div>':'')+'</div></div>';}).join('');
+}
+function toggleVMenu(e,id){
+  e.stopPropagation();
+  var wasOpen=document.getElementById('vmenu-'+id).classList.contains('open');
+  closeVMenus();
+  if(!wasOpen)document.getElementById('vmenu-'+id).classList.add('open');
+}
+function closeVMenus(){
+  document.querySelectorAll('.vmenu-dropdown').forEach(function(m){m.classList.remove('open');});
+}
+document.addEventListener('click',function(){closeVMenus();});
+
+// ══ CALENDARIO ══
+var MESES=[{i:6,n:'Junio',bg:'#F2D5D5'},{i:7,n:'Julio',bg:'#F5E3D0'},{i:8,n:'Agosto',bg:'#F7F2D8'},{i:9,n:'Septiembre',bg:'#D8EAD8'},{i:10,n:'Octubre',bg:'#D5F0E8'},{i:11,n:'Noviembre',bg:'#D5E8F2'},{i:12,n:'Diciembre',bg:'#E8E2F5'}];
+var curM=0,selD=null;
+function buildMstrip(){document.getElementById('mstrip').innerHTML=MESES.map(function(m,i){return'<button class="mchip'+(i===0?' on':'')+'" id="mc'+i+'" onclick="jmpM('+i+')">'+m.n.substring(0,3)+'</button>';}).join('');}
+function jmpM(i){curM=i;selD=null;for(var j=0;j<7;j++){var b=document.getElementById('mc'+j);if(b)b.className='mchip'+(j===i?' on':'');}renderCal();}
+function prevMes(){if(curM>0)jmpM(curM-1);}
+function nextMes(){if(curM<6)jmpM(curM+1);}
+function renderCal(){
+  var m=MESES[curM],mn=m.i,yr=2026;
+  document.getElementById('calstripe').style.background=m.bg;
+  document.getElementById('caltitle').textContent=m.n+' 2026';
+  var first=new Date(yr,mn-1,1).getDay(),off=(first+6)%7;
+  var days=new Date(yr,mn,0).getDate(),today=new Date();
+  var evD={};
+  (S.eventos||[]).forEach(function(e){var d=new Date(e.fecha+'T12:00:00');if(d.getMonth()+1===mn&&d.getFullYear()===yr)evD[d.getDate()]=true;});
+  var html='<div class="cdlbl">Lun</div><div class="cdlbl">Mar</div><div class="cdlbl">Mié</div><div class="cdlbl">Jue</div><div class="cdlbl">Vie</div><div class="cdlbl">Sáb</div><div class="cdlbl">Dom</div>';
+  for(var i=0;i<off;i++)html+='<div class="cc emp"></div>';
+  for(var d=1;d<=days;d++){var isT=today.getDate()===d&&today.getMonth()+1===mn&&today.getFullYear()===yr;var hasEv=!!evD[d],isSel=selD===d;html+='<div class="cc'+(isT?' today':'')+(hasEv?' hasev':'')+(isSel?' sel':'')+'" onclick="selDate('+d+')">'+d+'</div>';}
+  document.getElementById('calgrid').innerHTML=html;
+  renderEvList();
+}
+function selDate(d){selD=(selD===d)?null:d;var m=MESES[curM];var mm=String(m.i).padStart(2,'0'),dd=String(d).padStart(2,'0');document.getElementById('evfec').value='2026-'+mm+'-'+dd;renderCal();}
+function addEv(){var t=document.getElementById('evtit').value.trim(),f=document.getElementById('evfec').value,c=document.getElementById('evcolor').value;if(!t||!f)return;if(!S.eventos)S.eventos=[];S.eventos.push({id:Date.now(),titulo:t,fecha:f,color:c});document.getElementById('evtit').value='';document.getElementById('evfec').value='';save();renderCal();initInicio();}
+function delEv(id){S.eventos=S.eventos.filter(function(e){return e.id!==id;});save();renderCal();initInicio();}
+function renderEvList(){
+  var m=MESES[curM],mn=m.i;
+  var evs=(S.eventos||[]).filter(function(e){var d=new Date(e.fecha+'T12:00:00');return d.getMonth()+1===mn&&d.getFullYear()===2026;});
+  if(selD)evs=evs.filter(function(e){return new Date(e.fecha+'T12:00:00').getDate()===selD;});
+  evs.sort(function(a,b){return a.fecha.localeCompare(b.fecha);});
+  var el=document.getElementById('evlist');
+  if(!evs.length){el.innerHTML='<div class="empty"><div class="eic">🗓️</div>'+(selD?'Sin eventos este día':'Sin eventos este mes')+'</div>';return;}
+  el.innerHTML=evs.map(function(e){var d=new Date(e.fecha+'T12:00:00');var lbl=d.toLocaleDateString('es-CL',{weekday:'short',day:'numeric',month:'short'});return'<div class="evitem"><div class="evdot" style="background:'+e.color+'"></div><div class="evbody"><div class="evtitle">'+e.titulo+'</div><div class="evdate">'+lbl+'</div></div><button class="del" onclick="delEv('+e.id+')">×</button></div>';}).join('');
+}
+
+// ══ LUGARES ══
+function addLugar(){var n=document.getElementById('lgnom').value.trim();if(!n)return;if(!S.lugares)S.lugares=[];S.lugares.unshift({id:Date.now(),n:n,dir:document.getElementById('lgdir').value.trim(),link:document.getElementById('lglink').value.trim(),nota:document.getElementById('lgnota').value.trim(),foto:fotos.lg});['lgnom','lgdir','lglink','lgnota'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('lgprev').style.display='none';document.getElementById('lgfnm').textContent='Sin foto';fotos.lg=null;save();renderLugares();}
+function delLugar(id){S.lugares=S.lugares.filter(function(l){return l.id!==id;});save();renderLugares();}
+function renderLugares(){var el=document.getElementById('lglist');if(!(S.lugares||[]).length){el.innerHTML='<div class="empty"><div class="eic">📍</div>Agrega tu primer lugar</div>';return;}el.innerHTML=S.lugares.map(function(l){return'<div class="lgcard">'+(l.foto?'<img class="lgimg" src="'+l.foto+'">':`<div class="lgph" style="background:linear-gradient(135deg,var(--sage),var(--mint))">📍</div>`)+'<div class="lgbody"><button class="lgdel" onclick="delLugar('+l.id+')">×</button><div class="lgname">'+l.n+'</div>'+(l.dir?'<div class="lgdir">📍 '+l.dir+'</div>':'')+(l.link?'<a class="ilink" href="'+l.link+'" target="_blank">Ver →</a>':'')+(l.nota?'<div class="lgnota">'+l.nota+'</div>':'')+'</div></div>';}).join('');}
+
+
+// ══ FINANZAS ══
+var movCatE={comida:'🍔',transporte:'🚌',ropa:'👗',salud:'💊',entretenimiento:'🎬',estudios:'📚',hogar:'🏠',otro:'✨'};
+var movCatL={comida:'Comida',transporte:'Transporte',ropa:'Ropa',salud:'Salud',entretenimiento:'Entretenimiento',estudios:'Estudios',hogar:'Hogar',otro:'Otro'};
+
+function toggleMovCat(){
+  var tipo=document.getElementById('mov-tipo').value;
+  document.getElementById('mov-cat-row').style.display=tipo==='gasto'?'flex':'none';
+}
+
+function finTab(tab,btn){
+  var subs=['mov','graf','metas','consejera'];
+  for(var i=0;i<subs.length;i++)document.getElementById('fs-'+subs[i]).className='fin-sub'+(subs[i]===tab?' on':'');
+  var btns=document.querySelectorAll('.fin-tab');
+  for(var i=0;i<btns.length;i++)btns[i].className='fin-tab'+(btns[i]===btn?' on':'');
+  if(tab==='graf')renderCharts();
+}
+
+function addMov(){
+  var monto=parseFloat(document.getElementById('mov-monto').value.replace(/[^0-9.-]/g,''));
+  if(!monto||monto<=0)return;
+  var tipo=document.getElementById('mov-tipo').value;
+  var cat=tipo==='gasto'?document.getElementById('mov-cat').value:'ingreso';
+  var nota=document.getElementById('mov-nota').value.trim();
+  if(!S.movs)S.movs=[];
+  S.movs.unshift({id:Date.now(),tipo:tipo,cat:cat,monto:monto,nota:nota,fecha:new Date().toISOString()});
+  document.getElementById('mov-monto').value='';
+  document.getElementById('mov-nota').value='';
+  save();renderFinanzas();
+}
+function delMov(id){S.movs=S.movs.filter(function(m){return m.id!==id;});save();renderFinanzas();}
+
+function fmtMoney(n){return '$'+Math.round(n).toLocaleString('es-CL');}
+
+function getMovsThisMonth(){
+  var now=new Date();
+  return (S.movs||[]).filter(function(m){
+    var d=new Date(m.fecha);
+    return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+  });
+}
+
+function renderFinanzas(){
+  var movs=getMovsThisMonth();
+  var ingresos=movs.filter(function(m){return m.tipo==='ingreso';}).reduce(function(a,m){return a+m.monto;},0);
+  var gastos=movs.filter(function(m){return m.tipo==='gasto';}).reduce(function(a,m){return a+m.monto;},0);
+  document.getElementById('fin-ingresos').textContent=fmtMoney(ingresos);
+  document.getElementById('fin-gastos').textContent=fmtMoney(gastos);
+  var bal=ingresos-gastos;
+  var balEl=document.getElementById('fin-balance');
+  balEl.textContent=fmtMoney(bal);
+  balEl.className='fin-summary-value '+(bal>=0?'pos':'neg');
+
+  renderMovList();
+  renderGoals();
+}
+
+function renderMovList(){
+  var el=document.getElementById('mov-list');
+  var movs=S.movs||[];
+  if(!movs.length){el.innerHTML='<div class="empty"><div class="eic">💰</div>Sin movimientos aún</div>';return;}
+  el.innerHTML=movs.slice(0,30).map(function(m){
+    var d=new Date(m.fecha);
+    var lbl=d.toLocaleDateString('es-CL',{day:'numeric',month:'short'});
+    var ic=m.tipo==='ingreso'?'💵':(movCatE[m.cat]||'✨');
+    var catLbl=m.tipo==='ingreso'?'Ingreso':(movCatL[m.cat]||m.cat);
+    return '<div class="mov-item"><div class="mov-ic">'+ic+'</div><div class="mov-body"><div class="mov-cat">'+catLbl+(m.nota?' — '+m.nota:'')+'</div><div class="mov-date">'+lbl+'</div></div><div class="mov-amt '+m.tipo+'">'+(m.tipo==='gasto'?'-':'+')+fmtMoney(m.monto)+'</div><button class="del" onclick="delMov('+m.id+')">×</button></div>';
+  }).join('');
+}
+
+function renderCharts(){
+  var movs=getMovsThisMonth().filter(function(m){return m.tipo==='gasto';});
+  var byCat={};
+  movs.forEach(function(m){byCat[m.cat]=(byCat[m.cat]||0)+m.monto;});
+  var cats=Object.keys(byCat);
+  var maxVal=Math.max.apply(null,cats.map(function(c){return byCat[c];}).concat([1]));
+  var colors=['#F2D5D5','#F5E3D0','#F7F2D8','#D8EAD8','#D5F0E8','#D5E8F2','#E8E2F5','#C8C2C2'];
+  var elCats=document.getElementById('chart-cats');
+  if(!cats.length){elCats.innerHTML='<div class="empty"><div class="eic">📊</div>Sin gastos este mes</div>';}
+  else{
+    elCats.innerHTML=cats.map(function(c,i){
+      var h=Math.max(8,(byCat[c]/maxVal)*120);
+      return '<div class="chart-bar-wrap"><div class="chart-bar" style="height:'+h+'px;background:'+colors[i%colors.length]+'"></div><div class="chart-bar-lbl">'+(movCatE[c]||'')+'<br>'+fmtMoney(byCat[c])+'</div></div>';
+    }).join('');
+  }
+
+  var ingresos=getMovsThisMonth().filter(function(m){return m.tipo==='ingreso';}).reduce(function(a,m){return a+m.monto;},0);
+  var gastos=movs.reduce(function(a,m){return a+m.monto;},0);
+  var maxIG=Math.max(ingresos,gastos,1);
+  var elIgv=document.getElementById('chart-igv');
+  elIgv.innerHTML=
+    '<div class="chart-bar-wrap"><div class="chart-bar" style="height:'+Math.max(8,(ingresos/maxIG)*120)+'px;background:var(--sage)"></div><div class="chart-bar-lbl">Ingresos<br>'+fmtMoney(ingresos)+'</div></div>'+
+    '<div class="chart-bar-wrap"><div class="chart-bar" style="height:'+Math.max(8,(gastos/maxIG)*120)+'px;background:var(--rose)"></div><div class="chart-bar-lbl">Gastos<br>'+fmtMoney(gastos)+'</div></div>';
+}
+
+function addGoal(){
+  var nombre=document.getElementById('goal-nombre').value.trim();
+  var monto=parseFloat(document.getElementById('goal-monto').value.replace(/[^0-9.-]/g,''));
+  if(!nombre||!monto||monto<=0)return;
+  if(!S.goals)S.goals=[];
+  S.goals.push({id:Date.now(),nombre:nombre,objetivo:monto,ahorrado:0});
+  document.getElementById('goal-nombre').value='';
+  document.getElementById('goal-monto').value='';
+  save();renderGoals();
+}
+function delGoal(id){S.goals=S.goals.filter(function(g){return g.id!==id;});save();renderGoals();}
+function addToGoal(id){
+  var g=(S.goals||[]).find(function(g){return g.id===id;});if(!g)return;
+  var amt=prompt('¿Cuánto quieres agregar a "'+g.nombre+'"?');
+  var val=parseFloat((amt||'').replace(/[^0-9.-]/g,''));
+  if(!val||val<=0)return;
+  g.ahorrado+=val;
+  save();renderGoals();
+}
+function renderGoals(){
+  var el=document.getElementById('goals-list');
+  var goals=S.goals||[];
+  if(!goals.length){el.innerHTML='<div class="empty"><div class="eic">🎯</div>Sin metas de ahorro aún</div>';return;}
+  el.innerHTML=goals.map(function(g){
+    var pct=Math.min(100,Math.round((g.ahorrado/g.objetivo)*100));
+    return '<div class="goal-card"><button class="goal-del" onclick="delGoal('+g.id+')">×</button><div class="goal-name">🎯 '+g.nombre+'</div><div class="goal-bar-bg"><div class="goal-bar-fill" style="width:'+pct+'%"></div></div><div class="goal-nums"><span>'+fmtMoney(g.ahorrado)+' de '+fmtMoney(g.objetivo)+'</span><span>'+pct+'%</span></div><div style="margin-top:8px"><button class="btn btn-sm btn-outline" onclick="addToGoal('+g.id+')">+ Agregar ahorro</button></div></div>';
+  }).join('');
+}
+
+function getFinCtx(){
+  var movs=getMovsThisMonth();
+  var ingresos=movs.filter(function(m){return m.tipo==='ingreso';}).reduce(function(a,m){return a+m.monto;},0);
+  var gastos=movs.filter(function(m){return m.tipo==='gasto';});
+  var totalGastos=gastos.reduce(function(a,m){return a+m.monto;},0);
+  var byCat={};
+  gastos.forEach(function(m){byCat[m.cat]=(byCat[m.cat]||0)+m.monto;});
+  var catStr=Object.keys(byCat).map(function(c){return movCatL[c]+': $'+Math.round(byCat[c]);}).join(', ')||'sin gastos registrados';
+  var goalsStr=(S.goals||[]).map(function(g){return g.nombre+': $'+Math.round(g.ahorrado)+' de $'+Math.round(g.objetivo)+' ('+Math.round((g.ahorrado/g.objetivo)*100)+'%)';}).join('; ')||'sin metas creadas';
+  return 'Ingresos del mes: $'+Math.round(ingresos)+'. Gastos totales del mes: $'+Math.round(totalGastos)+'. Gastos por categoría: '+catStr+'. Metas de ahorro: '+goalsStr+'.';
+}
+
+function sendFin(){
+  var inp=document.getElementById('fininput');var t=inp.value.trim();if(!t)return;inp.value='';
+  if(!S.fh)S.fh=[];
+  S.fh.push({role:'user',text:t});
+  addMsg('finmsgs','user',t);
+  var sys='Eres una consejera financiera personal cálida y práctica. Hablas en español chileno, usas pesos chilenos ($).\n\nDATOS FINANCIEROS DE ESTE MES:\n'+getFinCtx()+'\n\nSé concisa (3-4 oraciones máximo), práctica y sin juzgar. Da consejos concretos de ahorro basados en los datos reales. Usa emojis ocasionalmente 💰📊✅';
+  callGemini(sys,S.fh,'finmsgs');
+}
+function qfin(t){document.getElementById('fininput').value=t;sendFin();}
+
+// ══ GEMINI AI ══
+function getOutCtx(){return(S.outfits||[]).length?(S.outfits||[]).map(function(o){return'- '+o.nom+' ('+ocL[o.oc]+'): '+(o.desc||'sin desc');}).join('\n'):'Sin outfits guardados aún.';}
+function getColCtx(){return'Colores favorables: '+((S.colores||[]).map(function(c){return c.n;}).join(', ')||'no especificados')+'. Evitar: '+((S.evitar||[]).map(function(c){return c.n;}).join(', ')||'ninguno')+'. '+(S.cnotas||'');}
+function getEvCtx(){if(!(S.eventos||[]).length)return'Sin pruebas registradas.';var t=new Date();t.setHours(0,0,0,0);return S.eventos.map(function(e){var d=new Date(e.fecha+'T12:00:00');d.setHours(0,0,0,0);var diff=Math.round((d-t)/86400000);return'- '+e.titulo+': '+e.fecha+' ('+(diff>=0?'en '+diff+' días':'ya pasó')+')';}).join('\n');}
+
+function addMsg(elId,role,text){
+  var el=document.getElementById(elId);
+  var t=new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
+  var div=document.createElement('div');
+  div.className='msg '+(role==='model'?'mai':'muser');
+  div.innerHTML='<div class="mbub">'+text.replace(/\n/g,'<br>')+'</div><div class="mtime">'+t+'</div>';
+  el.appendChild(div);el.scrollTop=el.scrollHeight;
+}
+function showTyping(elId){var el=document.getElementById(elId);var div=document.createElement('div');div.className='msg mai';div.id='typ-'+elId;div.innerHTML='<div class="mbub"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>';el.appendChild(div);el.scrollTop=el.scrollHeight;}
+function hideTyping(elId){var t=document.getElementById('typ-'+elId);if(t)t.remove();}
+
+async function callGemini(sysPrompt, history, msgsId){
+  showTyping(msgsId);
+  try{
+    var msgs = [{role:'system',content:sysPrompt}].concat(history.map(function(m){return{role:m.role==='model'?'assistant':'user',content:m.text};}));
+    var url='/api/chat';
+    var body={messages:msgs};
+    var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    var data=await r.json();
+    hideTyping(msgsId);
+    var rep='No pude responder. ';
+    if(data.choices&&data.choices[0]&&data.choices[0].message){
+      rep=data.choices[0].message.content||rep;
+    } else if(data.error) {
+      rep='Error: '+(data.error.message||JSON.stringify(data.error));
+    } else {
+      rep='Respuesta inesperada: '+JSON.stringify(data).substring(0,200);
+    }
+    history.push({role:'model',text:rep});
+    addMsg(msgsId,'model',rep);
+  }catch(e){
+    hideTyping(msgsId);
+    addMsg(msgsId,'model','Error: '+e.message);
+  }
+}
+
+function sendStyle(){
+  var inp=document.getElementById('sinput');var t=inp.value.trim();if(!t)return;inp.value='';
+  if(!S.sh)S.sh=[];
+  S.sh.push({role:'user',text:t});
+  addMsg('smsgs','user',t);
+  var sys='Eres una estilista personal cálida, creativa y experta. Hablas en español chileno. Conoces el guardarropa de tu clienta.\n\nGUARDARROPA:\n'+getOutCtx()+'\n\nCOLORIMETRÍA:\n'+getColCtx()+'\n\nSé concisa (3-4 oraciones máximo), cálida. Usa emojis de moda ocasionalmente. Si te preguntan por un evento, pregunta el código de vestimenta.';
+  callGemini(sys,S.sh,'smsgs');
+}
+function qstyle(t){document.getElementById('sinput').value=t;sendStyle();}
+
+function sendCal(){
+  var inp=document.getElementById('cinput');var t=inp.value.trim();if(!t)return;inp.value='';
+  if(!S.ch)S.ch=[];
+  S.ch.push({role:'user',text:t});
+  addMsg('cmsgs','user',t);
+  var sys='Eres una planificadora de estudio inteligente y empática. Hablas en español chileno. Ayudas a una estudiante con déficit atencional a organizar sus estudios.\n\nPRUEBAS REGISTRADAS:\n'+getEvCtx()+'\n\nSé concisa y clara (4 oraciones máx). Sugiere sesiones cortas de 25-30 min con descansos de 10 min. Usa emojis ocasionalmente 📚⏰✅';
+  callGemini(sys,S.ch,'cmsgs');
+}
+function qcal(t){document.getElementById('cinput').value=t;sendCal();}
+
+// ══ INIT ══
+checkSession();
+buildMstrip();
+if(curUser){
+  renderWish();renderOutfits();renderPal();renderEv();renderVision();renderLugares();
+  if(S.cnotas)document.getElementById('cnotas').value=S.cnotas;
+  setTimeout(function(){addMsg('smsgs','model',(S.outfits||[]).length?'¡Hola! 💅 Tienes '+(S.outfits||[]).length+' outfit(s) guardado(s). ¿Para qué ocasión necesitas inspiración?':'¡Hola! Soy tu estilista personal ✨ Agrega tus outfits y te ayudaré a combinarlos.');},300);
+  setTimeout(function(){addMsg('cmsgs','model',(S.eventos||[]).length?'¡Hola! 📚 Veo que tienes eventos registrados. ¿Te ayudo a organizar tu estudio?':'¡Hola! Soy tu planificadora ✅ Agrega tus pruebas en el calendario y te organizo cuándo y cuánto estudiar.');},400);
+}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(function(){});}
+</script>
+</body>
+</html>
