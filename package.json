@@ -2,6 +2,6 @@
   "name": "mi-mundo",
   "version": "1.0.0",
   "dependencies": {
-    "@upstash/redis": "^1.34.0"
+    "redis": "^4.7.0"
   }
 }
