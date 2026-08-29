@@ -12,26 +12,29 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500&display=swap');
 :root {
-  --bg:#FAF8F5;--white:#FFFFFF;--rose:#F2D5D5;--rose-d:#B8787A;
-  --lav:#E8E2F5;--lav-d:#8A7EC0;--sage:#D8EAD8;--sage-d:#6A9A6A;
-  --peach:#F5E3D0;--peach-d:#C07A50;--butter:#F7F2D8;--butter-d:#A89840;
-  --sky:#D5E8F2;--sky-d:#5A8FAA;--mint:#D5F0E8;--mint-d:#4A9A7A;
+  --bg:#F7F4F2;--white:#FFFFFF;--rose:#F8E7EA;--rose-d:#F4C7D1;
+  --lav:#F8E7EA;--lav-d:#F4C7D1;--sage:#DCE7D7;--sage-d:#B8C9B5;
+  --peach:#F8E7EA;--peach-d:#F4C7D1;--butter:#DCE7D7;--butter-d:#B8C9B5;
+  --sky:#D6E2EA;--sky-d:#4F718C;--mint:#DCE7D7;--mint-d:#B8C9B5;
   --text:#2E2A2A;--soft:#9A9090;--xs:#C8C2C2;--border:#EDE8E3;
-  --r:16px;--shadow:0 2px 14px rgba(0,0,0,0.06);
+  --accent:#F4C7D1;--accent-soft:#F8E7EA;
+  --r:16px;--shadow:0 4px 12px rgba(0,0,0,0.05);
 }
 body[data-theme="azul"] {
-  --bg:#F5F8FA;--white:#FFFFFF;--rose:#D5E5F2;--rose-d:#5A85AA;
-  --lav:#DDE5F0;--lav-d:#6A82C0;--sage:#D8E8E5;--sage-d:#4A9A8C;
-  --peach:#E0EAF5;--peach-d:#5A7AB0;--butter:#E8F0F7;--butter-d:#4A80A8;
-  --sky:#D0E5F5;--sky-d:#3A7AAA;--mint:#D5EFEA;--mint-d:#3A9A85;
+  --bg:#F7F4F2;--white:#FFFFFF;--rose:#D6E2EA;--rose-d:#4F718C;
+  --lav:#D6E2EA;--lav-d:#4F718C;--sage:#DCE7D7;--sage-d:#B8C9B5;
+  --peach:#D6E2EA;--peach-d:#4F718C;--butter:#D6E2EA;--butter-d:#4F718C;
+  --sky:#D6E2EA;--sky-d:#4F718C;--mint:#D6E2EA;--mint-d:#4F718C;
   --text:#25303A;--soft:#8090A0;--xs:#C2CAD2;--border:#E0E8ED;
+  --accent:#4F718C;--accent-soft:#D6E2EA;
 }
 body[data-theme="neutro"] {
-  --bg:#F7F7F5;--white:#FFFFFF;--rose:#E5E0DA;--rose-d:#8A7F6E;
-  --lav:#E5E5E0;--lav-d:#7A7A6E;--sage:#DEE5DC;--sage-d:#6A8060;
-  --peach:#EBE5DC;--peach-d:#9A7F5A;--butter:#EFEAD8;--butter-d:#9A8A40;
-  --sky:#DCE5E5;--sky-d:#5A8585;--mint:#DCEBE2;--mint-d:#4A9070;
+  --bg:#F7F4F2;--white:#FFFFFF;--rose:#DCE7D7;--rose-d:#B8C9B5;
+  --lav:#DCE7D7;--lav-d:#B8C9B5;--sage:#DCE7D7;--sage-d:#B8C9B5;
+  --peach:#DCE7D7;--peach-d:#B8C9B5;--butter:#DCE7D7;--butter-d:#B8C9B5;
+  --sky:#DCE7D7;--sky-d:#B8C9B5;--mint:#DCE7D7;--mint-d:#B8C9B5;
   --text:#2A2A28;--soft:#928F88;--xs:#CCC8C0;--border:#E8E5E0;
+  --accent:#B8C9B5;--accent-soft:#DCE7D7;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;}
@@ -55,7 +58,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .nb{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;color:var(--soft);font-family:'DM Sans',sans-serif;font-size:9px;padding:2px 6px;}
 .nb.on{color:var(--text);}
 .nb-ic{width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:var(--soft);}
-.nb.on .nb-ic{color:var(--lav-d);}
+.nb.on .nb-ic{color:var(--accent);}
 .nb-ic svg{width:100%;height:100%;}
 
 /* PAGES */
@@ -70,9 +73,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 
 @media (min-width:700px){
   .pg{max-width:100%;}
-  .cal-two-col{display:flex;gap:20px;align-items:flex-start;max-width:1000px;margin:0 auto;padding:0 16px;}
-  .cal-col-left{flex:1.2;}
-  .cal-col-right{flex:1;margin-top:0;}
+  .cal-two-col{display:flex;gap:20px;align-items:flex-start;max-width:1100px;margin:0 auto;padding:0 16px;}
+  .cal-col-left{flex:0 0 65%;}
+  .cal-col-right{flex:0 0 33%;margin-top:0;}
   .day-panel-card{margin:0 0 13px;}
   .cal-ai-compact{margin:0;}
   .accesos{grid-template-columns:repeat(3,1fr);max-width:900px;margin-left:auto;margin-right:auto;}
@@ -116,12 +119,41 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
 .isub{font-size:12px;color:var(--soft);margin-top:2px;}
 .ilink{font-size:12px;color:var(--sky-d);text-decoration:none;display:block;margin-top:2px;}
 
+/* ══ BENTO GRID INICIO ══ */
+.bento-page{position:relative;min-height:100vh;padding:20px 16px 100px;display:flex;flex-direction:column;}
+.bento-grid{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:12px;flex:1;padding-top:34px;}
+.bento-hero{
+  grid-column:1/-1;
+  background:linear-gradient(135deg,var(--rose),var(--sky));
+  border-radius:var(--r);padding:24px 20px;box-shadow:var(--shadow);
+  min-height:150px;display:flex;flex-direction:column;justify-content:center;
+}
+.bento-hero-greet{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--text);margin-bottom:4px;}
+.bento-hero-date{font-size:13px;color:var(--text);opacity:.75;}
+.bento-hero-user{font-size:12px;color:var(--text);opacity:.6;margin-top:4px;}
+.bento-card{
+  background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);
+  padding:20px 14px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  gap:8px;cursor:pointer;transition:transform .12s;min-height:110px;
+}
+.bento-card:active{transform:scale(0.97);}
+.bento-ic{width:26px;height:26px;color:var(--accent);}
+.bento-ic svg{width:100%;height:100%;}
+.bento-nm{font-size:14px;font-weight:600;color:var(--text);}
+.bento-sub{font-size:11px;color:var(--soft);}
+.bento-logout{grid-column:1/-1;background:none;border:1.5px solid var(--border);border-radius:var(--r);padding:12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--soft);cursor:pointer;margin-top:4px;}
+
+@media (min-width:700px){
+  .bento-grid{grid-template-columns:repeat(3,1fr);max-width:1000px;margin:0 auto;}
+  .bento-hero{grid-column:1/-1;}
+}
+
 /* INICIO */
 .ihero{background:linear-gradient(135deg,#F2D5D5 0%,#E8E2F5 50%,#D5E8F2 100%);padding:52px 20px 32px;text-align:center;}
 .igreet{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;margin-bottom:6px;}
 .idate{font-size:13px;color:var(--soft);}
 .iuser{font-size:12px;color:var(--lav-d);margin-top:4px;}
-.alert{margin:14px 16px 0;background:linear-gradient(135deg,var(--butter),var(--peach));border-radius:var(--r);padding:14px 16px;font-size:13px;line-height:1.5;border:1px solid var(--border);}
+.alert{margin:14px 0 0;background:rgba(255,255,255,0.5);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5;border:none;}
 .alert strong{display:block;font-size:14px;margin-bottom:3px;}
 .accesos{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;}
 .ac{background:var(--white);border-radius:var(--r);padding:20px 14px;box-shadow:var(--shadow);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;text-align:center;}
@@ -334,33 +366,61 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
 </div>
 
 <!-- INICIO -->
-<div class="pg on" id="pg-inicio">
-  <div class="ihero" style="position:relative">
-    <button id="theme-fab" onclick="toggleThemePicker(event)" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.7);backdrop-filter:blur(6px);border:none;border-radius:50%;width:38px;height:38px;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.08)">✨</button>
-    <div id="theme-popover" style="display:none;position:absolute;top:60px;right:16px;background:var(--white);border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,0.15);border:1px solid var(--border);padding:12px;z-index:50;min-width:170px">
-      <div style="font-size:11px;color:var(--soft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding-left:2px">Color de la app</div>
-      <button onclick="setTheme('rosa')" class="theme-opt" id="theme-rosa" style="display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:8px;border-radius:10px;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text)"><span style="width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#F2D5D5,#E8E2F5);flex-shrink:0"></span>Femenino</button>
-      <button onclick="setTheme('azul')" class="theme-opt" id="theme-azul" style="display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:8px;border-radius:10px;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text)"><span style="width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#5A85AA,#3A4A6A);flex-shrink:0"></span>Masculino</button>
-      <button onclick="setTheme('neutro')" class="theme-opt" id="theme-neutro" style="display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:8px;border-radius:10px;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text)"><span style="width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#8A9A7A,#6A7A6A);flex-shrink:0"></span>Neutro</button>
+<div class="pg on bento-page" id="pg-inicio">
+  <button id="theme-fab" onclick="toggleThemePicker(event)" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.85);border:none;border-radius:50%;width:38px;height:38px;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);z-index:20">✨</button>
+  <div id="theme-popover" style="display:none;position:absolute;top:60px;right:16px;background:var(--white);border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,0.15);border:1px solid var(--border);padding:12px;z-index:50;min-width:170px">
+    <div style="font-size:11px;color:var(--soft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding-left:2px">Color de la app</div>
+    <button onclick="setTheme('rosa')" class="theme-opt" id="theme-rosa" style="display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:8px;border-radius:10px;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text)"><span style="width:16px;height:16px;border-radius:50%;background:#F4C7D1;flex-shrink:0"></span>Femenino</button>
+    <button onclick="setTheme('azul')" class="theme-opt" id="theme-azul" style="display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:8px;border-radius:10px;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text)"><span style="width:16px;height:16px;border-radius:50%;background:#4F718C;flex-shrink:0"></span>Masculino</button>
+    <button onclick="setTheme('neutro')" class="theme-opt" id="theme-neutro" style="display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:8px;border-radius:10px;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text)"><span style="width:16px;height:16px;border-radius:50%;background:#B8C9B5;flex-shrink:0"></span>Verde</button>
+  </div>
+
+  <div class="bento-grid">
+    <div class="bento-hero">
+      <div class="bento-hero-greet" id="greet">Hola ✨</div>
+      <div class="bento-hero-date" id="hoydate"></div>
+      <div class="bento-hero-user" id="iuser"></div>
+      <div id="alertbox"></div>
     </div>
-    <div class="igreet" id="greet">Hola ✨</div>
-    <div class="idate" id="hoydate"></div>
-    <div class="iuser" id="iuser"></div>
+
+    <div class="bento-card" onclick="ir('finanzas')">
+      <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5a2.5 2.5 0 012.5-1h.3a2.2 2.2 0 010 4.4H12a2.2 2.2 0 000 4.4h.3a2.5 2.5 0 002.5-1"/></svg></div>
+      <div class="bento-nm">Finanzas</div>
+      <div class="bento-sub">Gastos y ahorro</div>
+    </div>
+    <div class="bento-card" onclick="ir('compras')">
+      <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg></div>
+      <div class="bento-nm">Compras</div>
+      <div class="bento-sub">Wishlist</div>
+    </div>
+    <div class="bento-card" onclick="ir('cal')">
+      <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
+      <div class="bento-nm">Calendario</div>
+      <div class="bento-sub">Pruebas y eventos</div>
+    </div>
+    <div class="bento-card" onclick="ir('estilo')">
+      <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4l4 3 4-3 3 4-2 2v9H7v-9L5 8l3-4z"/></svg></div>
+      <div class="bento-nm">Estilo</div>
+      <div class="bento-sub">Outfits</div>
+    </div>
+    <div class="bento-card" onclick="ir('vision')">
+      <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+      <div class="bento-nm">Vision Board</div>
+      <div class="bento-sub">Inspiración</div>
+    </div>
+    <div class="bento-card" onclick="ir('lugares')">
+      <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg></div>
+      <div class="bento-nm">Lugares</div>
+      <div class="bento-sub">Direcciones</div>
+    </div>
+
+    <button class="bento-logout" onclick="logout()">Cerrar sesión</button>
   </div>
-  <div id="alertbox"></div>
-  <div class="accesos">
-    <div class="ac" onclick="ir('compras')"><div class="ac-ic">🛍️</div><div class="ac-nm">Compras</div><div class="ac-sub">Wishlist con fotos</div></div>
-    <div class="ac" onclick="ir('estilo')"><div class="ac-ic">👗</div><div class="ac-nm">Estilo</div><div class="ac-sub">Outfits + estilista</div></div>
-    <div class="ac" onclick="ir('vision')"><div class="ac-ic">🌸</div><div class="ac-nm">Vision Board</div><div class="ac-sub">Fotos e inspiración</div></div>
-    <div class="ac" onclick="ir('cal')"><div class="ac-ic">📅</div><div class="ac-nm">Calendario</div><div class="ac-sub">Planificador + IA</div></div>
-    <div class="ac" onclick="ir('lugares')"><div class="ac-ic">📍</div><div class="ac-nm">Lugares</div><div class="ac-sub">Sitios y direcciones</div></div>
-    <div class="ac" onclick="ir('finanzas')"><div class="ac-ic">💰</div><div class="ac-nm">Finanzas</div><div class="ac-sub">Gastos y ahorro</div></div>
-  </div>
-  <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
 </div>
 
 <!-- COMPRAS -->
 <div class="pg" id="pg-compras">
+
   <div class="hero" style="background:linear-gradient(135deg,var(--peach),var(--butter))">
     <h1>Quiero comprar 🛍️</h1><p>Tiendas, precios y dónde encontrarlo</p>
   </div>
@@ -507,12 +567,33 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
 
 <!-- CALENDARIO -->
 <div class="pg" id="pg-cal">
-  <div class="hero" style="background:linear-gradient(135deg,var(--sky),var(--mint))">
-    <h1>Calendario 2026 📅</h1><p>Planificador de estudio con IA</p>
+  <div class="hero" style="background:linear-gradient(135deg,var(--sky),var(--mint));display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <h1>Calendario 2026 📅</h1><p>Planificador de estudio con IA</p>
+    </div>
+    <button class="btn btn-sm" style="flex-shrink:0" onclick="toggleAddEventForm()" id="day-panel-addbtn">+ Agregar evento</button>
   </div>
   <div class="stabs" style="padding:14px 16px 0">
     <button class="stab on" id="caltab-mes" onclick="calTab('mes')">📅 Mes</button>
     <button class="stab" id="caltab-todos" onclick="calTab('todos')">✅ Todos mis eventos</button>
+  </div>
+
+  <div id="day-panel-form" class="card" style="display:none;margin:14px 16px 0">
+    <div class="clabel">+ Nuevo evento</div>
+    <div class="row"><input type="text" id="evtit" placeholder="Nombre del evento o prueba..." /></div>
+    <div class="row">
+      <select id="evtipo" onchange="updateEvColor()">
+        <option value="prueba">📝 Prueba/Examen</option>
+        <option value="cumpleanos">🎂 Cumpleaños</option>
+        <option value="evento">📌 Evento</option>
+        <option value="tramite">📋 Trámite</option>
+      </select>
+    </div>
+    <div class="row">
+      <input type="date" id="evfec" style="flex:1">
+    </div>
+    <input type="hidden" id="evcolor" value="#F2D5D5">
+    <div class="row" style="justify-content:flex-end"><button class="btn btn-sm" onclick="addEv()">Guardar evento</button></div>
   </div>
 
   <div class="fin-sub on" id="calsub-mes">
@@ -532,23 +613,6 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
       <div class="card day-panel-card">
         <div class="clabel" id="day-panel-title">📋 Selecciona un día</div>
         <div id="day-panel-events"></div>
-        <button class="btn btn-sm" style="width:100%;margin-top:10px" onclick="toggleAddEventForm()" id="day-panel-addbtn">+ Agregar evento</button>
-        <div id="day-panel-form" style="display:none;margin-top:12px">
-          <div class="row"><input type="text" id="evtit" placeholder="Nombre del evento o prueba..." /></div>
-          <div class="row">
-            <select id="evtipo" onchange="updateEvColor()">
-              <option value="prueba">📝 Prueba/Examen</option>
-              <option value="cumpleanos">🎂 Cumpleaños</option>
-              <option value="evento">📌 Evento</option>
-              <option value="tramite">📋 Trámite</option>
-            </select>
-          </div>
-          <div class="row">
-            <input type="date" id="evfec" style="flex:1">
-          </div>
-          <input type="hidden" id="evcolor" value="#F2D5D5">
-          <div class="row" style="justify-content:flex-end"><button class="btn btn-sm" onclick="addEv()">Guardar evento</button></div>
-        </div>
       </div>
 
       <div class="chatbox cal-ai-compact">
