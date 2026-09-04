@@ -66,17 +66,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 
 /* Pantallas más anchas (iPad, desktop): usar todo el ancho disponible */
 .cal-col-left{width:100%;}
-.cal-col-right{width:100%;margin-top:13px;}
-.day-panel-card{margin:0 16px 13px;}
-.cal-ai-compact{margin:0 16px 13px;}
-.cal-ai-compact .chatmsgs{height:160px;}
+.cal-col-right{width:auto;margin-top:0;max-width:260px;}
+.day-panel-card{margin:0 16px 13px;padding:16px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);min-height:280px;}
+.day-panel-card #day-panel-title{font-size:13px;font-weight:600;color:var(--text);text-transform:none;letter-spacing:0;margin-bottom:10px;}
+#day-panel-events{font-size:13px;}
+.cal-two-col{position:relative;}
+.cal-ai-strip{display:none;}
+.cal-ai-toggle{width:100%;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--soft);cursor:pointer;text-align:left;box-shadow:var(--shadow);}
+.cal-ai-compact{margin-top:8px;}
+.cal-ai-compact .chatmsgs{height:140px;}
 
-@media (min-width:700px){
+@media (min-width:600px){
   .pg{max-width:100%;}
-  .cal-two-col{display:flex;gap:20px;align-items:flex-start;max-width:1100px;margin:0 auto;padding:0 16px;}
-  .cal-col-left{flex:0 0 65%;}
-  .cal-col-right{flex:0 0 33%;margin-top:0;}
-  .day-panel-card{margin:0 0 13px;}
+  .cal-two-col{display:flex;gap:16px;align-items:flex-start;max-width:1100px;margin:0 auto;padding:0 16px;}
+  .cal-col-left{flex:1;min-width:0;}
+  .cal-col-right{flex:0 0 240px;width:240px;}
+  .day-panel-card{margin:0;}
   .cal-ai-compact{margin:0;}
   .accesos{grid-template-columns:repeat(3,1fr);max-width:900px;margin-left:auto;margin-right:auto;}
   .ogrid{grid-template-columns:repeat(4,1fr);max-width:1000px;margin-left:auto;margin-right:auto;}
@@ -120,8 +125,8 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
 .ilink{font-size:12px;color:var(--sky-d);text-decoration:none;display:block;margin-top:2px;}
 
 /* ══ BENTO GRID INICIO ══ */
-.bento-page{position:relative;min-height:100vh;padding:20px 16px 100px;display:flex;flex-direction:column;}
-.bento-grid{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:12px;flex:1;padding-top:34px;}
+.bento-page{position:relative;min-height:100vh;padding:44px 24px 110px;display:flex;flex-direction:column;}
+.bento-grid{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:18px;flex:1;padding-top:40px;}
 .bento-hero{
   grid-column:1/-1;
   background:linear-gradient(135deg,var(--rose),var(--sky));
@@ -133,15 +138,57 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
 .bento-hero-user{font-size:12px;color:var(--text);opacity:.6;margin-top:4px;}
 .bento-card{
   background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);
-  padding:20px 14px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
-  gap:8px;cursor:pointer;transition:transform .12s;min-height:110px;
+  padding:26px 18px;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  gap:10px;cursor:pointer;transition:transform .12s;min-height:140px;text-align:center;
 }
 .bento-card:active{transform:scale(0.97);}
-.bento-ic{width:26px;height:26px;color:var(--accent);}
+.bento-ic{width:30px;height:30px;color:var(--accent);}
 .bento-ic svg{width:100%;height:100%;}
 .bento-nm{font-size:14px;font-weight:600;color:var(--text);}
 .bento-sub{font-size:11px;color:var(--soft);}
 .bento-logout{grid-column:1/-1;background:none;border:1.5px solid var(--border);border-radius:var(--r);padding:12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--soft);cursor:pointer;margin-top:4px;}
+.bento-check-card{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);padding:14px;max-height:180px;display:flex;flex-direction:column;}
+.bento-check-card .clabel{font-size:10px;margin-bottom:6px;}
+.bento-check-card .bento-check-input{margin-bottom:6px;}
+.bento-check-card .bento-check-input input{font-size:12px;padding:6px 8px;}
+.bento-check-card .bento-check-input button{padding:6px 10px;font-size:12px;}
+#dailytodo-list{overflow-y:auto;flex:1;}
+
+/* ══ CUADERNO ══ */
+.cuaderno-canvas{position:relative;min-height:70vh;background:var(--bg);border-radius:12px;overflow:auto;padding:10px;}
+.hoja{
+  position:absolute;width:180px;min-height:160px;
+  border-radius:10px;padding:14px 12px 12px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.12);
+  cursor:grab;user-select:none;
+  display:flex;flex-direction:column;gap:6px;
+}
+.hoja:active{cursor:grabbing;z-index:100;}
+.hoja-nota{background:#FFF6C9;}
+.hoja-lista{background:#D5F0E8;}
+.hoja-postit{background:#F2D5D5;}
+.hoja-blanco{background:var(--white);border:1.5px solid var(--border);width:220px;min-height:260px;}
+.hoja-blanco textarea{min-height:210px;line-height:1.6;}
+.hoja-drag-handle{font-size:11px;opacity:.4;text-align:center;letter-spacing:2px;margin-bottom:2px;cursor:grab;}
+.hoja-del{position:absolute;top:6px;right:8px;background:none;border:none;font-size:15px;cursor:pointer;opacity:.5;}
+.hoja textarea{
+  width:100%;flex:1;border:none;background:transparent;resize:none;
+  font-family:'DM Sans',sans-serif;font-size:13px;outline:none;color:var(--text);
+  min-height:80px;
+}
+.hoja-lista-items{display:flex;flex-direction:column;gap:4px;}
+.hoja-lista-item{display:flex;align-items:center;gap:6px;font-size:12px;}
+.hoja-lista-item input[type=checkbox]{width:14px;height:14px;flex-shrink:0;}
+.hoja-lista-item input[type=text]{border:none;background:transparent;font-size:12px;flex:1;outline:none;font-family:'DM Sans',sans-serif;}
+.hoja-lista-add{font-size:11px;color:var(--soft);background:none;border:none;cursor:pointer;text-align:left;padding:2px 0;}
+
+.bento-check-input{display:flex;gap:8px;margin-bottom:10px;}
+.bento-check-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);}
+.bento-check-item label{font-size:12px;}
+.bento-check-item:last-child{border-bottom:none;}
+.bento-check-item input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent);flex-shrink:0;}
+.bento-check-item label{flex:1;font-size:14px;}
+.bento-check-item.done label{text-decoration:line-through;color:var(--soft);}
 
 @media (min-width:700px){
   .bento-grid{grid-template-columns:repeat(3,1fr);max-width:1000px;margin:0 auto;}
@@ -383,6 +430,11 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
       <div id="alertbox"></div>
     </div>
 
+    <div class="bento-card" onclick="abrirCuaderno()">
+      <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h13a3 3 0 013 3v13H7a3 3 0 01-3-3V4z"/><path d="M4 4v13a3 3 0 003 3"/><path d="M9 9h7M9 13h5"/></svg></div>
+      <div class="bento-nm">Cuaderno</div>
+      <div class="bento-sub">Notas y post-its</div>
+    </div>
     <div class="bento-card" onclick="ir('finanzas')">
       <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5a2.5 2.5 0 012.5-1h.3a2.2 2.2 0 010 4.4H12a2.2 2.2 0 000 4.4h.3a2.5 2.5 0 002.5-1"/></svg></div>
       <div class="bento-nm">Finanzas</div>
@@ -392,6 +444,7 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
       <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg></div>
       <div class="bento-nm">Compras</div>
       <div class="bento-sub">Wishlist</div>
+
     </div>
     <div class="bento-card" onclick="ir('cal')">
       <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
@@ -412,6 +465,15 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
       <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg></div>
       <div class="bento-nm">Lugares</div>
       <div class="bento-sub">Direcciones</div>
+    </div>
+
+    <div class="bento-check-card">
+      <div class="clabel">✅ Por hacer hoy</div>
+      <div class="bento-check-input">
+        <input type="text" id="dailytodo-input" placeholder="Agregar algo para hoy..." onkeydown="if(event.key==='Enter')addDailyTodo()">
+        <button class="btn btn-sm" onclick="addDailyTodo()">+</button>
+      </div>
+      <div id="dailytodo-list"></div>
     </div>
 
     <button class="bento-logout" onclick="logout()">Cerrar sesión</button>
@@ -614,25 +676,23 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
         <div class="clabel" id="day-panel-title">📋 Selecciona un día</div>
         <div id="day-panel-events"></div>
       </div>
+    </div>
+  </div>
 
-      <div class="chatbox cal-ai-compact">
-        <div class="chatheader" style="background:linear-gradient(135deg,var(--sky),var(--mint))">
-          <span style="font-size:16px">🧠</span>
-          <div><div class="chname" style="font-size:12px">Planificadora IA</div></div>
-        </div>
-        <div class="chips">
-          <div class="chip" onclick="qcal('¿Cómo me organizo para estudiar esta semana?')">📚 Esta semana</div>
-          <div class="chip" onclick="qcal('Tengo una prueba en 5 días, ¿cuánto estudio por día?')">⏰ 5 días</div>
-        </div>
-        <div class="chatmsgs" id="cmsgs" style="height:160px"></div>
-        <div class="chatinput">
-          <input type="text" id="cinput" placeholder="Pregúntale a tu planificadora..." onkeydown="if(event.key==='Enter')sendCal()">
-          <button class="csend" style="background:var(--mint-d)" onclick="sendCal()">➤</button>
-        </div>
+  <div class="cal-ai-strip">
+    <button class="cal-ai-toggle" onclick="toggleCalAI()">🧠 Planificadora IA <span id="cal-ai-arrow">▾</span></button>
+    <div class="chatbox cal-ai-compact" id="cal-ai-box" style="display:none">
+      <div class="chips">
+        <div class="chip" onclick="qcal('¿Cómo me organizo para estudiar esta semana?')">📚 Esta semana</div>
+        <div class="chip" onclick="qcal('Tengo una prueba en 5 días, ¿cuánto estudio por día?')">⏰ 5 días</div>
+      </div>
+      <div class="chatmsgs" id="cmsgs" style="height:140px"></div>
+      <div class="chatinput">
+        <input type="text" id="cinput" placeholder="Pregúntale a tu planificadora..." onkeydown="if(event.key==='Enter')sendCal()">
+        <button class="csend" style="background:var(--mint-d)" onclick="sendCal()">➤</button>
       </div>
     </div>
   </div>
-  <div id="evlist"></div>
   </div>
 
   <div class="fin-sub" id="calsub-todos">
@@ -763,6 +823,22 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
     <div class="row" style="justify-content:flex-end"><button class="btn btn-sm" onclick="addLugar()">Guardar lugar</button></div>
   </div>
   <div id="lglist"></div>
+</div>
+
+<!-- CUADERNO -->
+<div id="cuaderno-modal" class="modal-bg" style="display:none" onclick="cerrarCuadernoBg(event)">
+  <div class="modal-box" style="max-height:90vh">
+    <button class="modal-close" onclick="cerrarCuaderno()">×</button>
+    <div class="modal-title">📔 Mi Cuaderno</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <button class="btn btn-sm" onclick="addHoja('nota')">✎ Nota</button>
+      <button class="btn btn-sm btn-outline" onclick="addHoja('lista')">☑ Lista</button>
+      <button class="btn btn-sm btn-outline" onclick="addHoja('postit')">📌 Post-it</button>
+      <button class="btn btn-sm btn-outline" onclick="addHoja('blanco')">📄 Hoja en blanco</button>
+      <button class="btn btn-sm btn-outline" onclick="addHoja('dibujo')">✏️ Dibujo</button>
+    </div>
+    <div id="cuaderno-canvas" class="cuaderno-canvas"></div>
+  </div>
 </div>
 
 <!-- MODAL EDITAR VISION -->
@@ -921,7 +997,7 @@ function logout(){
   document.getElementById('auth-err').textContent='';
 }
 
-function defaultData(){return {wish:[],outfits:[],vision:[],eventos:[],lugares:[],colores:[],evitar:[],cnotas:'',sh:[],ch:[],movs:[],goals:[],fh:[],medidas:{},theme:'rosa'};}
+function defaultData(){return {wish:[],outfits:[],vision:[],eventos:[],lugares:[],colores:[],evitar:[],cnotas:'',sh:[],ch:[],movs:[],goals:[],fh:[],medidas:{},theme:'rosa',dailytodos:[],cuaderno:[]};}
 
 var saveTimeout=null;
 function save(){
@@ -1022,6 +1098,250 @@ function loadTheme(){
   markThemeButtons(t);
 }
 
+// ══ CUADERNO ══
+function abrirCuaderno(){
+  document.getElementById('cuaderno-modal').style.display='flex';
+  renderCuaderno();
+}
+function cerrarCuaderno(){
+  document.getElementById('cuaderno-modal').style.display='none';
+}
+function cerrarCuadernoBg(e){
+  if(e.target.id==='cuaderno-modal')cerrarCuaderno();
+}
+function addHoja(tipo){
+  if(!S.cuaderno)S.cuaderno=[];
+  var offset=(S.cuaderno.length%6)*22;
+  var hoja={id:Date.now(),tipo:tipo,x:20+offset,y:20+offset,texto:'',items:tipo==='lista'?[{id:1,texto:'',hecho:false}]:undefined,color:tipo==='postit'?'#F2D5D5':(tipo==='nota'?'#FFF6C9':'#FFFFFF'),paperStyle:'liso',trazos:[]};
+  S.cuaderno.push(hoja);
+  save();
+  renderCuaderno();
+}
+function setHojaColor(id,color){
+  var h=(S.cuaderno||[]).find(function(h){return h.id===id;});
+  if(h){h.color=color;save();renderCuaderno();}
+}
+function setHojaPaperStyle(id,style){
+  var h=(S.cuaderno||[]).find(function(h){return h.id===id;});
+  if(h){h.paperStyle=style;save();renderCuaderno();}
+}
+function delHoja(id){
+  if(!confirm('¿Eliminar esta hoja?'))return;
+  S.cuaderno=(S.cuaderno||[]).filter(function(h){return h.id!==id;});
+  save();renderCuaderno();
+}
+function updateHojaTexto(id,texto){
+  var h=(S.cuaderno||[]).find(function(h){return h.id===id;});
+  if(h){h.texto=texto;save();}
+}
+
+var drawState=null;
+function initCanvasHoja(id){
+  var canvas=document.getElementById('canvas-'+id);
+  if(!canvas||canvas.dataset.inited)return;
+  canvas.dataset.inited='1';
+  var ctx=canvas.getContext('2d');
+  var h=(S.cuaderno||[]).find(function(h){return h.id===id;});
+  if(h&&h.trazoImg){
+    var img=new Image();
+    img.onload=function(){ctx.drawImage(img,0,0,canvas.width,canvas.height);};
+    img.src=h.trazoImg;
+  }
+  function getPos(e){
+    var rect=canvas.getBoundingClientRect();
+    var p=e.touches?e.touches[0]:e;
+    return {x:(p.clientX-rect.left)*(canvas.width/rect.width),y:(p.clientY-rect.top)*(canvas.height/rect.height)};
+  }
+  function start(e){
+    e.preventDefault();e.stopPropagation();
+    drawState={drawing:true};
+    var pos=getPos(e);
+    ctx.beginPath();ctx.moveTo(pos.x,pos.y);
+    ctx.strokeStyle='#2E2A2A';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';
+  }
+  function move(e){
+    if(!drawState||!drawState.drawing)return;
+    e.preventDefault();e.stopPropagation();
+    var pos=getPos(e);
+    ctx.lineTo(pos.x,pos.y);ctx.stroke();
+  }
+  function end(e){
+    if(!drawState)return;
+    drawState.drawing=false;
+    var hoja=(S.cuaderno||[]).find(function(h){return h.id===id;});
+    if(hoja){hoja.trazoImg=canvas.toDataURL('image/png');save();}
+  }
+  canvas.addEventListener('mousedown',start);
+  canvas.addEventListener('mousemove',move);
+  canvas.addEventListener('mouseup',end);
+  canvas.addEventListener('mouseleave',end);
+  canvas.addEventListener('touchstart',start,{passive:false});
+  canvas.addEventListener('touchmove',move,{passive:false});
+  canvas.addEventListener('touchend',end);
+}
+function clearCanvasHoja(id){
+  if(!confirm('¿Borrar todo el dibujo?'))return;
+  var canvas=document.getElementById('canvas-'+id);
+  var ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  var h=(S.cuaderno||[]).find(function(h){return h.id===id;});
+  if(h){h.trazoImg=null;save();}
+}
+function addHojaListaItem(id){
+  var h=(S.cuaderno||[]).find(function(h){return h.id===id;});
+  if(!h)return;
+  if(!h.items)h.items=[];
+  h.items.push({id:Date.now(),texto:'',hecho:false});
+  save();renderCuaderno();
+}
+function toggleHojaListaItem(hojaId,itemId){
+  var h=(S.cuaderno||[]).find(function(h){return h.id===hojaId;});
+  if(!h)return;
+  var it=h.items.find(function(i){return i.id===itemId;});
+  if(it){it.hecho=!it.hecho;save();}
+}
+function updateHojaListaItemTexto(hojaId,itemId,texto){
+  var h=(S.cuaderno||[]).find(function(h){return h.id===hojaId;});
+  if(!h)return;
+  var it=h.items.find(function(i){return i.id===itemId;});
+  if(it){it.texto=texto;save();}
+}
+
+var dragState=null;
+function startDragHoja(e,id){
+  var isTouch=e.type==='touchstart';
+  var point=isTouch?e.touches[0]:e;
+  var hojaEl=document.getElementById('hoja-'+id);
+  var canvas=document.getElementById('cuaderno-canvas');
+  var canvasRect=canvas.getBoundingClientRect();
+  var hojaRect=hojaEl.getBoundingClientRect();
+  dragState={
+    id:id,
+    offsetX:point.clientX-hojaRect.left,
+    offsetY:point.clientY-hojaRect.top,
+    canvasRect:canvasRect
+  };
+  document.addEventListener(isTouch?'touchmove':'mousemove',onDragHoja,{passive:false});
+  document.addEventListener(isTouch?'touchend':'mouseup',endDragHoja);
+}
+function onDragHoja(e){
+  if(!dragState)return;
+  e.preventDefault();
+  var isTouch=e.type==='touchmove';
+  var point=isTouch?e.touches[0]:e;
+  var hojaEl=document.getElementById('hoja-'+dragState.id);
+  if(!hojaEl)return;
+  var canvas=document.getElementById('cuaderno-canvas');
+  var canvasRect=canvas.getBoundingClientRect();
+  var x=point.clientX-canvasRect.left-dragState.offsetX+canvas.scrollLeft;
+  var y=point.clientY-canvasRect.top-dragState.offsetY+canvas.scrollTop;
+  x=Math.max(0,x);y=Math.max(0,y);
+  hojaEl.style.left=x+'px';
+  hojaEl.style.top=y+'px';
+}
+function endDragHoja(e){
+  if(!dragState)return;
+  var h=(S.cuaderno||[]).find(function(h){return h.id===dragState.id;});
+  var hojaEl=document.getElementById('hoja-'+dragState.id);
+  if(h&&hojaEl){
+    h.x=parseInt(hojaEl.style.left);
+    h.y=parseInt(hojaEl.style.top);
+    save();
+  }
+  document.removeEventListener('mousemove',onDragHoja);
+  document.removeEventListener('mouseup',endDragHoja);
+  document.removeEventListener('touchmove',onDragHoja);
+  document.removeEventListener('touchend',endDragHoja);
+  dragState=null;
+}
+
+var HOJA_COLORES=['#F4C7D1','#F8E7EA','#4F718C','#D6E2EA','#B8C9B5','#DCE7D7','#FFF6C9','#D5F0E8','#FFFFFF'];
+
+function renderCuaderno(){
+  var canvasEl=document.getElementById('cuaderno-canvas');
+  if(!canvasEl)return;
+  var hojas=S.cuaderno||[];
+  if(!hojas.length){
+    canvasEl.innerHTML='<div class="empty" style="padding:60px 20px"><div class="eic">📔</div>Crea tu primera hoja con los botones de arriba</div>';
+    return;
+  }
+  var paperBg={
+    liso:'',
+    rayas:'repeating-linear-gradient(to bottom, transparent, transparent 23px, #E5E0D8 24px)',
+    cuadros:'repeating-linear-gradient(to bottom, transparent, transparent 19px, #E5E0D8 20px), repeating-linear-gradient(to right, transparent, transparent 19px, #E5E0D8 20px)'
+  };
+  canvasEl.innerHTML=hojas.map(function(h){
+    var esGrande=(h.tipo==='blanco'||h.tipo==='dibujo');
+    var claseTam=esGrande?' hoja-blanco':'';
+    var bgColor=h.color||(h.tipo==='postit'?'#F2D5D5':(h.tipo==='nota'?'#FFF6C9':(h.tipo==='lista'?'#D5F0E8':'#FFFFFF')));
+    var bgPattern=(h.tipo==='blanco')?(paperBg[h.paperStyle||'liso']||''):'';
+    var colorSwatches=HOJA_COLORES.map(function(c){
+      return '<span onclick="setHojaColor('+h.id+',\''+c+'\')" style="width:14px;height:14px;border-radius:50%;background:'+c+';display:inline-block;margin-right:4px;cursor:pointer;border:1px solid rgba(0,0,0,0.1)"></span>';
+    }).join('');
+    var paperBtns='';
+    if(h.tipo==='blanco'){
+      paperBtns='<div style="display:flex;gap:4px;margin-bottom:6px">'+
+        '<button onclick="setHojaPaperStyle('+h.id+',\'liso\')" style="font-size:9px;padding:3px 7px;border-radius:6px;border:1px solid var(--border);background:'+((h.paperStyle||'liso')==='liso'?'var(--bg)':'transparent')+';cursor:pointer">Liso</button>'+
+        '<button onclick="setHojaPaperStyle('+h.id+',\'rayas\')" style="font-size:9px;padding:3px 7px;border-radius:6px;border:1px solid var(--border);background:'+(h.paperStyle==='rayas'?'var(--bg)':'transparent')+';cursor:pointer">Rayas</button>'+
+        '<button onclick="setHojaPaperStyle('+h.id+',\'cuadros\')" style="font-size:9px;padding:3px 7px;border-radius:6px;border:1px solid var(--border);background:'+(h.paperStyle==='cuadros'?'var(--bg)':'transparent')+';cursor:pointer">Cuadros</button>'+
+      '</div>';
+    }
+    var contenido='';
+    if(h.tipo==='lista'){
+      var itemsHtml=(h.items||[]).map(function(it){
+        return '<div class="hoja-lista-item"><input type="checkbox" '+(it.hecho?'checked':'')+' onchange="toggleHojaListaItem('+h.id+','+it.id+')"><input type="text" value="'+(it.texto||'').replace(/"/g,'&quot;')+'" placeholder="..." onblur="updateHojaListaItemTexto('+h.id+','+it.id+',this.value)" style="'+(it.hecho?'text-decoration:line-through;opacity:.5':'')+'"></div>';
+      }).join('');
+      contenido='<div class="hoja-lista-items">'+itemsHtml+'</div><button class="hoja-lista-add" onclick="addHojaListaItem('+h.id+')">+ agregar</button>';
+    }else if(h.tipo==='dibujo'){
+      contenido='<button onclick="clearCanvasHoja('+h.id+')" style="font-size:9px;padding:3px 7px;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;margin-bottom:6px;align-self:flex-start">Borrar dibujo</button><canvas id="canvas-'+h.id+'" width="380" height="380" style="width:100%;height:220px;background:#fff;border-radius:6px;touch-action:none"></canvas>';
+    }else{
+      contenido='<textarea placeholder="Escribe aquí..." onblur="updateHojaTexto('+h.id+',this.value)">'+(h.texto||'')+'</textarea>';
+    }
+    var styleAttr='left:'+h.x+'px;top:'+h.y+'px;background:'+bgColor+(bgPattern?';background-image:'+bgPattern:'');
+    return '<div class="hoja'+claseTam+'" id="hoja-'+h.id+'" style="'+styleAttr+'">'+
+      '<button class="hoja-del" onclick="delHoja('+h.id+')">×</button>'+
+      '<div class="hoja-drag-handle" onmousedown="startDragHoja(event,'+h.id+')" ontouchstart="startDragHoja(event,'+h.id+')">⠿⠿⠿</div>'+
+      (h.tipo!=='dibujo'&&h.tipo!=='blanco'?'<div style="margin-bottom:4px">'+colorSwatches+'</div>':'')+
+      paperBtns+
+      contenido+
+    '</div>';
+  }).join('');
+  hojas.forEach(function(h){
+    if(h.tipo==='dibujo')setTimeout(function(){initCanvasHoja(h.id);},50);
+  });
+}
+
+function todayKey(){
+  var d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function addDailyTodo(){
+  var inp=document.getElementById('dailytodo-input');
+  var t=inp.value.trim();if(!t)return;
+  if(!S.dailytodos)S.dailytodos=[];
+  S.dailytodos.push({id:Date.now(),texto:t,hecho:false,dia:todayKey()});
+  inp.value='';
+  save();renderDailyTodos();
+}
+function toggleDailyTodo(id){
+  var it=(S.dailytodos||[]).find(function(x){return x.id===id;});
+  if(it){it.hecho=!it.hecho;save();renderDailyTodos();}
+}
+function delDailyTodo(id){
+  S.dailytodos=(S.dailytodos||[]).filter(function(x){return x.id!==id;});
+  save();renderDailyTodos();
+}
+function renderDailyTodos(){
+  var el=document.getElementById('dailytodo-list');
+  if(!el)return;
+  var hoy=todayKey();
+  var items=(S.dailytodos||[]).filter(function(x){return x.dia===hoy;});
+  if(!items.length){el.innerHTML='<div style="font-size:12px;color:var(--soft);padding:6px 0">Nada pendiente por ahora 🌿</div>';return;}
+  el.innerHTML=items.map(function(it){
+    return '<div class="bento-check-item'+(it.hecho?' done':'')+'"><input type="checkbox" '+(it.hecho?'checked':'')+' onchange="toggleDailyTodo('+it.id+')"><label>'+it.texto+'</label><button class="del" onclick="delDailyTodo('+it.id+')">×</button></div>';
+  }).join('');
+}
+
 function initInicio(){
   loadTheme();
   var now=new Date();
@@ -1044,6 +1364,7 @@ function initInicio(){
     }).join('');
     ab.innerHTML='<div class="alert">🔔 <strong>Próximos recordatorios</strong>'+items+'</div>';
   }else{ab.innerHTML='';}
+  renderDailyTodos();
 }
 
 // ══ COMPRAS ══
@@ -1257,6 +1578,14 @@ document.addEventListener('click',function(){closeVMenus();});
 // ══ CALENDARIO ══
 var MESES=[{i:6,n:'Junio',bg:'#F2D5D5'},{i:7,n:'Julio',bg:'#F5E3D0'},{i:8,n:'Agosto',bg:'#F7F2D8'},{i:9,n:'Septiembre',bg:'#D8EAD8'},{i:10,n:'Octubre',bg:'#D5F0E8'},{i:11,n:'Noviembre',bg:'#D5E8F2'},{i:12,n:'Diciembre',bg:'#E8E2F5'}];
 var curM=0,selD=null;
+function toggleCalAI(){
+  var box=document.getElementById('cal-ai-box');
+  var arrow=document.getElementById('cal-ai-arrow');
+  var open=box.style.display==='block';
+  box.style.display=open?'none':'block';
+  if(arrow)arrow.textContent=open?'▾':'▴';
+}
+
 function calTab(tab){
   document.getElementById('calsub-mes').className='fin-sub'+(tab==='mes'?' on':'');
   document.getElementById('calsub-todos').className='fin-sub'+(tab==='todos'?' on':'');
@@ -1365,6 +1694,8 @@ function addEv(){
 }
 function delEv(id){S.eventos=S.eventos.filter(function(e){return e.id!==id;});save();renderCal();initInicio();}
 function renderEvList(){
+  var el=document.getElementById('evlist');
+  if(!el)return;
   var m=MESES[curM],mn=m.i;
   var evs=(S.eventos||[]).filter(function(e){var d=new Date(e.fecha+'T12:00:00');return d.getMonth()+1===mn&&d.getFullYear()===2026;});
   if(selD)evs=evs.filter(function(e){return new Date(e.fecha+'T12:00:00').getDate()===selD;});
