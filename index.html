@@ -66,8 +66,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 
 /* Pantallas más anchas (iPad, desktop): usar todo el ancho disponible */
 .cal-col-left{width:100%;}
-.cal-col-right{width:auto;margin-top:0;max-width:260px;}
-.day-panel-card{margin:0 16px 13px;padding:16px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);min-height:280px;}
+.cal-col-right{width:auto;margin-top:0;max-width:400px;}
+.day-panel-card{margin:0 16px 13px;padding:16px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);min-height:200px;min-width:160px;position:relative;resize:both;overflow:auto;max-width:90vw;max-height:70vh;}
+.resize-handle{position:absolute;bottom:2px;right:2px;width:20px;height:20px;cursor:nwse-resize;color:var(--soft);opacity:.5;display:flex;align-items:flex-end;justify-content:flex-end;font-size:12px;touch-action:none;}
 .day-panel-card #day-panel-title{font-size:13px;font-weight:600;color:var(--text);text-transform:none;letter-spacing:0;margin-bottom:10px;}
 #day-panel-events{font-size:13px;}
 .cal-two-col{position:relative;}
@@ -80,7 +81,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
   .pg{max-width:100%;}
   .cal-two-col{display:flex;gap:16px;align-items:flex-start;max-width:1100px;margin:0 auto;padding:0 16px;}
   .cal-col-left{flex:1;min-width:0;}
-  .cal-col-right{flex:0 0 240px;width:240px;}
+  .cal-col-right{flex:0 0 auto;width:240px;}
   .day-panel-card{margin:0;}
   .cal-ai-compact{margin:0;}
   .accesos{grid-template-columns:repeat(3,1fr);max-width:900px;margin-left:auto;margin-right:auto;}
@@ -160,10 +161,11 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
   position:absolute;width:180px;min-height:160px;
   border-radius:10px;padding:14px 12px 12px;
   box-shadow:0 3px 10px rgba(0,0,0,0.12);
-  cursor:grab;user-select:none;
+  user-select:none;
   display:flex;flex-direction:column;gap:6px;
+  resize:both;overflow:auto;max-width:500px;max-height:600px;min-width:140px;
 }
-.hoja:active{cursor:grabbing;z-index:100;}
+.hoja:active{z-index:100;}
 .hoja-nota{background:#FFF6C9;}
 .hoja-lista{background:#D5F0E8;}
 .hoja-postit{background:#F2D5D5;}
@@ -671,10 +673,11 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
       <div class="calgrid" id="calgrid"></div>
     </div>
 
-    <div class="cal-col-right">
-      <div class="card day-panel-card">
+    <div class="cal-col-right" id="cal-col-right">
+      <div class="card day-panel-card" id="day-panel-card">
         <div class="clabel" id="day-panel-title">📋 Selecciona un día</div>
         <div id="day-panel-events"></div>
+        <div class="resize-handle" onmousedown="startResizePanel(event)" ontouchstart="startResizePanel(event)">◢</div>
       </div>
     </div>
   </div>
@@ -997,7 +1000,7 @@ function logout(){
   document.getElementById('auth-err').textContent='';
 }
 
-function defaultData(){return {wish:[],outfits:[],vision:[],eventos:[],lugares:[],colores:[],evitar:[],cnotas:'',sh:[],ch:[],movs:[],goals:[],fh:[],medidas:{},theme:'rosa',dailytodos:[],cuaderno:[]};}
+function defaultData(){return {wish:[],outfits:[],vision:[],eventos:[],lugares:[],colores:[],evitar:[],cnotas:'',sh:[],ch:[],movs:[],goals:[],fh:[],medidas:{},theme:'rosa',dailytodos:[],cuaderno:[],panelSize:null};}
 
 var saveTimeout=null;
 function save(){
@@ -1039,7 +1042,7 @@ function ir(pg){
   }
   var navEl=document.querySelector('.nav');
   if(navEl)navEl.style.display=(pg==='inicio')?'none':'flex';
-  if(pg==='cal')renderCal();
+  if(pg==='cal'){renderCal();setTimeout(loadPanelSize,50);}
   if(pg==='inicio')initInicio();
   if(pg==='finanzas')renderFinanzas();
 }
@@ -1116,6 +1119,14 @@ function addHoja(tipo){
   S.cuaderno.push(hoja);
   save();
   renderCuaderno();
+}
+function toggleColorPicker(e,id){
+  e.stopPropagation();
+  var pick=document.getElementById('colorpick-'+id);
+  if(!pick)return;
+  var isOpen=pick.style.display==='block';
+  document.querySelectorAll('[id^="colorpick-"]').forEach(function(p){p.style.display='none';});
+  pick.style.display=isOpen?'none':'block';
 }
 function setHojaColor(id,color){
   var h=(S.cuaderno||[]).find(function(h){return h.id===id;});
@@ -1255,6 +1266,41 @@ function endDragHoja(e){
   dragState=null;
 }
 
+var hojaResizeState=null;
+function startResizeHoja(e,id){
+  e.preventDefault();e.stopPropagation();
+  var isTouch=e.type==='touchstart';
+  var point=isTouch?e.touches[0]:e;
+  var el=document.getElementById('hoja-'+id);
+  var rect=el.getBoundingClientRect();
+  hojaResizeState={id:id,startX:point.clientX,startY:point.clientY,startW:rect.width,startH:rect.height};
+  document.addEventListener(isTouch?'touchmove':'mousemove',onResizeHoja,{passive:false});
+  document.addEventListener(isTouch?'touchend':'mouseup',endResizeHoja);
+}
+function onResizeHoja(e){
+  if(!hojaResizeState)return;
+  e.preventDefault();
+  var isTouch=e.type==='touchmove';
+  var point=isTouch?e.touches[0]:e;
+  var el=document.getElementById('hoja-'+hojaResizeState.id);
+  if(!el)return;
+  var newW=Math.max(120,hojaResizeState.startW+(point.clientX-hojaResizeState.startX));
+  var newH=Math.max(100,hojaResizeState.startH+(point.clientY-hojaResizeState.startY));
+  el.style.width=newW+'px';
+  el.style.height=newH+'px';
+}
+function endResizeHoja(){
+  if(!hojaResizeState)return;
+  var el=document.getElementById('hoja-'+hojaResizeState.id);
+  var h=(S.cuaderno||[]).find(function(h){return h.id===hojaResizeState.id;});
+  if(h&&el){h.w=parseInt(el.style.width);h.h=parseInt(el.style.height);save();}
+  document.removeEventListener('mousemove',onResizeHoja);
+  document.removeEventListener('mouseup',endResizeHoja);
+  document.removeEventListener('touchmove',onResizeHoja);
+  document.removeEventListener('touchend',endResizeHoja);
+  hojaResizeState=null;
+}
+
 var HOJA_COLORES=['#F4C7D1','#F8E7EA','#4F718C','#D6E2EA','#B8C9B5','#DCE7D7','#FFF6C9','#D5F0E8','#FFFFFF'];
 
 function renderCuaderno(){
@@ -1301,7 +1347,8 @@ function renderCuaderno(){
     return '<div class="hoja'+claseTam+'" id="hoja-'+h.id+'" style="'+styleAttr+'">'+
       '<button class="hoja-del" onclick="delHoja('+h.id+')">×</button>'+
       '<div class="hoja-drag-handle" onmousedown="startDragHoja(event,'+h.id+')" ontouchstart="startDragHoja(event,'+h.id+')">⠿⠿⠿</div>'+
-      (h.tipo!=='dibujo'&&h.tipo!=='blanco'?'<div style="margin-bottom:4px">'+colorSwatches+'</div>':'')+
+      '<div class="resize-handle" onmousedown="startResizeHoja(event,'+h.id+')" ontouchstart="startResizeHoja(event,'+h.id+')">◢</div>'+
+      (h.tipo!=='dibujo'&&h.tipo!=='blanco'?'<div style="margin-bottom:4px"><button onclick="toggleColorPicker(event,'+h.id+')" style="width:16px;height:16px;border-radius:50%;background:'+bgColor+';border:1.5px solid rgba(0,0,0,0.2);cursor:pointer;padding:0" title="Cambiar color"></button><div id="colorpick-'+h.id+'" style="display:none;margin-top:6px">'+colorSwatches+'</div></div>':'')+
       paperBtns+
       contenido+
     '</div>';
@@ -1640,6 +1687,53 @@ function renderCal(){
   renderDayPanel();
 }
 function selDate(d){selD=(selD===d)?null:d;var m=MESES[curM];var mm=String(m.i).padStart(2,'0'),dd=String(d).padStart(2,'0');document.getElementById('evfec').value='2026-'+mm+'-'+dd;renderCal();renderDayPanel();}
+
+var panelResizeState=null;
+function startResizePanel(e){
+  e.preventDefault();e.stopPropagation();
+  var isTouch=e.type==='touchstart';
+  var point=isTouch?e.touches[0]:e;
+  var card=document.getElementById('day-panel-card');
+  var rect=card.getBoundingClientRect();
+  panelResizeState={startX:point.clientX,startY:point.clientY,startW:rect.width,startH:rect.height};
+  document.addEventListener(isTouch?'touchmove':'mousemove',onResizePanel,{passive:false});
+  document.addEventListener(isTouch?'touchend':'mouseup',endResizePanel);
+}
+function onResizePanel(e){
+  if(!panelResizeState)return;
+  e.preventDefault();
+  var isTouch=e.type==='touchmove';
+  var point=isTouch?e.touches[0]:e;
+  var card=document.getElementById('day-panel-card');
+  var newW=Math.max(160,Math.min(420,panelResizeState.startW+(point.clientX-panelResizeState.startX)));
+  var newH=Math.max(160,panelResizeState.startH+(point.clientY-panelResizeState.startY));
+  card.style.width=newW+'px';
+  card.style.height=newH+'px';
+  document.getElementById('cal-col-right').style.flexBasis=newW+'px';
+  document.getElementById('cal-col-right').style.width=newW+'px';
+}
+function endResizePanel(){
+  if(!panelResizeState)return;
+  var card=document.getElementById('day-panel-card');
+  S.panelSize={w:card.style.width,h:card.style.height};
+  save();
+  document.removeEventListener('mousemove',onResizePanel);
+  document.removeEventListener('mouseup',endResizePanel);
+  document.removeEventListener('touchmove',onResizePanel);
+  document.removeEventListener('touchend',endResizePanel);
+  panelResizeState=null;
+}
+function loadPanelSize(){
+  if(S.panelSize){
+    var card=document.getElementById('day-panel-card');
+    if(card){
+      card.style.width=S.panelSize.w;
+      card.style.height=S.panelSize.h;
+      var col=document.getElementById('cal-col-right');
+      if(col){col.style.flexBasis=S.panelSize.w;col.style.width=S.panelSize.w;}
+    }
+  }
+}
 
 function toggleAddEventForm(){
   var f=document.getElementById('day-panel-form');
