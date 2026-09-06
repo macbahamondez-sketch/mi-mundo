@@ -738,6 +738,7 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
 
   <div class="fin-tabs">
     <button class="fin-tab on" onclick="finTab('mov',this)">📋 Movimientos</button>
+    <button class="fin-tab" onclick="finTab('historial',this)">🗂️ Historial</button>
     <button class="fin-tab" onclick="finTab('graf',this)">📊 Gráficos</button>
     <button class="fin-tab" onclick="finTab('metas',this)">🎯 Metas</button>
     <button class="fin-tab" onclick="finTab('consejera',this)">🤖 Consejera</button>
@@ -770,6 +771,32 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
       <div class="row" style="justify-content:flex-end"><button class="btn btn-sm" onclick="addMov()">Guardar</button></div>
     </div>
     <div id="mov-list"></div>
+  </div>
+
+  <!-- HISTORIAL -->
+  <div class="fin-sub" id="fs-historial">
+    <div class="mstrip" id="fin-mstrip"></div>
+    <div class="card" style="margin:0 16px 13px">
+      <div class="clabel" id="fin-hist-titulo">Resumen del mes</div>
+      <div class="fin-summary-grid" style="padding:0;margin-bottom:0">
+        <div class="fin-summary-card">
+          <div class="fin-summary-label">Ingresos</div>
+          <div class="fin-summary-value pos" id="fin-hist-ingresos">$0</div>
+        </div>
+        <div class="fin-summary-card">
+          <div class="fin-summary-label">Gastos</div>
+          <div class="fin-summary-value neg" id="fin-hist-gastos">$0</div>
+        </div>
+        <div class="fin-summary-card" style="grid-column:span 2">
+          <div class="fin-summary-label">Balance</div>
+          <div class="fin-summary-value" id="fin-hist-balance">$0</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin:0 16px 13px">
+      <div class="clabel">🗂️ Detalle de movimientos</div>
+      <div id="fin-hist-list"></div>
+    </div>
   </div>
 
   <!-- GRAFICOS -->
@@ -1911,11 +1938,12 @@ function toggleMovCat(){
 }
 
 function finTab(tab,btn){
-  var subs=['mov','graf','metas','consejera'];
+  var subs=['mov','historial','graf','metas','consejera'];
   for(var i=0;i<subs.length;i++)document.getElementById('fs-'+subs[i]).className='fin-sub'+(subs[i]===tab?' on':'');
   var btns=document.querySelectorAll('.fin-tab');
   for(var i=0;i<btns.length;i++)btns[i].className='fin-tab'+(btns[i]===btn?' on':'');
   if(tab==='graf')renderCharts();
+  if(tab==='historial'){buildFinMstrip();renderFinHistorial();}
 }
 
 function addMov(){
@@ -1933,6 +1961,65 @@ function addMov(){
 function delMov(id){S.movs=S.movs.filter(function(m){return m.id!==id;});save();renderFinanzas();}
 
 function fmtMoney(n){return '$'+Math.round(n).toLocaleString('es-CL');}
+
+var finHistMes=null; // {mes:1-12, anio:2026}
+
+function buildFinMstrip(){
+  var el=document.getElementById('fin-mstrip');
+  if(!el)return;
+  if(finHistMes===null){
+    var now=new Date();
+    finHistMes={mes:now.getMonth()+1,anio:now.getFullYear()};
+  }
+  el.innerHTML=MESES.map(function(m){
+    var activo=(m.i===finHistMes.mes&&finHistMes.anio===2026);
+    return '<button class="mchip'+(activo?' on':'')+'" onclick="selFinMes('+m.i+')">'+m.n.substring(0,3)+'</button>';
+  }).join('');
+}
+function selFinMes(mesNum){
+  finHistMes={mes:mesNum,anio:2026};
+  buildFinMstrip();
+  renderFinHistorial();
+}
+function getMovsDelMes(mesNum,anio){
+  return (S.movs||[]).filter(function(m){
+    var d=new Date(m.fecha);
+    return (d.getMonth()+1)===mesNum&&d.getFullYear()===anio;
+  });
+}
+function renderFinHistorial(){
+  if(finHistMes===null){
+    var now=new Date();
+    finHistMes={mes:now.getMonth()+1,anio:now.getFullYear()};
+  }
+  var mesInfo=MESES.find(function(m){return m.i===finHistMes.mes;});
+  var tituloEl=document.getElementById('fin-hist-titulo');
+  if(tituloEl)tituloEl.textContent='Resumen de '+(mesInfo?mesInfo.n:finHistMes.mes)+' '+finHistMes.anio;
+
+  var movs=getMovsDelMes(finHistMes.mes,finHistMes.anio);
+  var ingresos=movs.filter(function(m){return m.tipo==='ingreso';}).reduce(function(a,m){return a+m.monto;},0);
+  var gastos=movs.filter(function(m){return m.tipo==='gasto';}).reduce(function(a,m){return a+m.monto;},0);
+  document.getElementById('fin-hist-ingresos').textContent=fmtMoney(ingresos);
+  document.getElementById('fin-hist-gastos').textContent=fmtMoney(gastos);
+  var balEl=document.getElementById('fin-hist-balance');
+  var bal=ingresos-gastos;
+  balEl.textContent=fmtMoney(bal);
+  balEl.className='fin-summary-value '+(bal>=0?'pos':'neg');
+
+  var listEl=document.getElementById('fin-hist-list');
+  if(!movs.length){
+    listEl.innerHTML='<div class="empty"><div class="eic">🗂️</div>Sin movimientos registrados este mes</div>';
+    return;
+  }
+  var movsOrdenados=movs.slice().sort(function(a,b){return new Date(b.fecha)-new Date(a.fecha);});
+  listEl.innerHTML=movsOrdenados.map(function(m){
+    var d=new Date(m.fecha);
+    var lbl=d.toLocaleDateString('es-CL',{day:'numeric',month:'short'});
+    var ic=m.tipo==='ingreso'?'💵':(movCatE[m.cat]||'✨');
+    var catLbl=m.tipo==='ingreso'?'Ingreso':(movCatL[m.cat]||m.cat);
+    return '<div class="mov-item" style="margin:0 0 8px"><div class="mov-ic">'+ic+'</div><div class="mov-body"><div class="mov-cat">'+catLbl+(m.nota?' — '+m.nota:'')+'</div><div class="mov-date">'+lbl+'</div></div><div class="mov-amt '+m.tipo+'">'+(m.tipo==='gasto'?'-':'+')+fmtMoney(m.monto)+'</div></div>';
+  }).join('');
+}
 
 function getMovsThisMonth(){
   var now=new Date();
