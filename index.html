@@ -68,7 +68,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .resize-handle{position:absolute;bottom:2px;right:2px;width:20px;height:20px;cursor:nwse-resize;color:var(--soft);opacity:.5;display:flex;align-items:flex-end;justify-content:flex-end;font-size:12px;touch-action:none;}
 
 /* ══ VENTANITAS DEL CALENDARIO ══ */
-.cal-canvas{position:relative;min-height:640px;margin:14px 16px 0;overflow:auto;}
+.cal-canvas{position:relative;min-height:calc(100vh - 220px);margin:14px 16px 24px;overflow:auto;}
 .calwin{
   position:absolute;background:var(--white);border-radius:var(--r);
   box-shadow:0 3px 12px rgba(0,0,0,0.1);overflow:hidden;
@@ -79,7 +79,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
   letter-spacing:.5px;cursor:grab;flex-shrink:0;border-bottom:1px solid var(--border);
 }
 .calwin-bar:active{cursor:grabbing;}
-.calwin-body{padding:14px;flex:1;overflow-y:auto;}
+.calwin-body{padding:14px;flex:1;overflow-y:auto;overflow-x:hidden;}
 #day-panel-events{font-size:13px;}
 .cal-ai-strip{margin:14px 16px 0;}
 .cal-ai-toggle{width:100%;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--soft);cursor:pointer;text-align:left;box-shadow:var(--shadow);}
@@ -296,15 +296,15 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
 .modal-close{float:right;background:none;border:none;font-size:22px;cursor:pointer;color:var(--soft);}
 
 /* CALENDARIO */
-.mstrip{display:flex;gap:6px;overflow-x:auto;padding:14px 16px 8px;scrollbar-width:none;}
+.mstrip{display:flex;gap:6px;overflow-x:auto;padding:0 0 8px;scrollbar-width:none;}
 .mstrip::-webkit-scrollbar{display:none;}
 .mchip{flex-shrink:0;border:none;border-radius:20px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:var(--border);color:var(--soft);}
 .mchip.on{background:var(--text);color:white;}
-.calnav{display:flex;align-items:center;justify-content:space-between;margin:0 16px 12px;}
+.calnav{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px;}
 .caltitle{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;}
 .calnavbtn{background:none;border:none;font-size:22px;cursor:pointer;color:var(--soft);padding:4px 10px;}
-.calstripe{height:4px;border-radius:20px;margin:0 16px 12px;}
-.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:0 16px 14px;}
+.calstripe{height:4px;border-radius:20px;margin:0 0 12px;}
+.calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;margin:0;width:100%;box-sizing:border-box;}
 .cdlbl{text-align:center;font-size:11px;font-weight:500;color:var(--soft);padding:4px 0;}
 .cc{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:13px;cursor:pointer;position:relative;}
 .cc.today{background:var(--rose);color:var(--rose-d);font-weight:600;}
@@ -698,22 +698,7 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
 
   </div>
 
-  <div class="cal-ai-strip">
-    <button class="cal-ai-toggle" onclick="toggleCalAI()">🧠 Planificadora IA <span id="cal-ai-arrow">▾</span></button>
-    <div class="chatbox cal-ai-compact" id="cal-ai-box" style="display:none">
-      <div class="chips">
-        <div class="chip" onclick="qcal('¿Cómo me organizo para estudiar esta semana?')">📚 Esta semana</div>
-        <div class="chip" onclick="qcal('Tengo una prueba en 5 días, ¿cuánto estudio por día?')">⏰ 5 días</div>
-      </div>
-      <div class="chatmsgs" id="cmsgs" style="height:140px"></div>
-      <div class="chatinput">
-        <input type="text" id="cinput" placeholder="Pregúntale a tu planificadora..." onkeydown="if(event.key==='Enter')sendCal()">
-        <button class="csend" style="background:var(--mint-d)" onclick="sendCal()">➤</button>
-      </div>
-    </div>
-  </div>
 </div>
-
 
 <!-- FINANZAS -->
 <div class="pg" id="pg-finanzas">
