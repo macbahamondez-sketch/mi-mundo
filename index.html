@@ -65,25 +65,29 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .pg{display:none;padding-bottom:100px;max-width:600px;margin:0 auto;}
 
 /* Pantallas más anchas (iPad, desktop): usar todo el ancho disponible */
-.cal-col-left{width:100%;}
-.cal-col-right{width:auto;margin-top:0;max-width:400px;}
-.day-panel-card{margin:0 16px 13px;padding:16px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);min-height:200px;min-width:160px;position:relative;resize:both;overflow:auto;max-width:90vw;max-height:70vh;}
 .resize-handle{position:absolute;bottom:2px;right:2px;width:20px;height:20px;cursor:nwse-resize;color:var(--soft);opacity:.5;display:flex;align-items:flex-end;justify-content:flex-end;font-size:12px;touch-action:none;}
-.day-panel-card #day-panel-title{font-size:13px;font-weight:600;color:var(--text);text-transform:none;letter-spacing:0;margin-bottom:10px;}
+
+/* ══ VENTANITAS DEL CALENDARIO ══ */
+.cal-canvas{position:relative;min-height:640px;margin:14px 16px 0;overflow:auto;}
+.calwin{
+  position:absolute;background:var(--white);border-radius:var(--r);
+  box-shadow:0 3px 12px rgba(0,0,0,0.1);overflow:hidden;
+  display:flex;flex-direction:column;min-width:220px;min-height:180px;
+}
+.calwin-bar{
+  background:var(--bg);padding:8px 12px;font-size:11px;color:var(--soft);
+  letter-spacing:.5px;cursor:grab;flex-shrink:0;border-bottom:1px solid var(--border);
+}
+.calwin-bar:active{cursor:grabbing;}
+.calwin-body{padding:14px;flex:1;overflow-y:auto;}
 #day-panel-events{font-size:13px;}
-.cal-two-col{position:relative;}
-.cal-ai-strip{display:none;}
+.cal-ai-strip{margin:14px 16px 0;}
 .cal-ai-toggle{width:100%;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--soft);cursor:pointer;text-align:left;box-shadow:var(--shadow);}
 .cal-ai-compact{margin-top:8px;}
 .cal-ai-compact .chatmsgs{height:140px;}
 
 @media (min-width:600px){
   .pg{max-width:100%;}
-  .cal-two-col{display:flex;gap:16px;align-items:flex-start;max-width:1100px;margin:0 auto;padding:0 16px;}
-  .cal-col-left{flex:1;min-width:0;}
-  .cal-col-right{flex:0 0 auto;width:240px;}
-  .day-panel-card{margin:0;}
-  .cal-ai-compact{margin:0;}
   .accesos{grid-template-columns:repeat(3,1fr);max-width:900px;margin-left:auto;margin-right:auto;}
   .ogrid{grid-template-columns:repeat(4,1fr);max-width:1000px;margin-left:auto;margin-right:auto;}
   .vgrid{grid-template-columns:repeat(4,1fr);max-width:1000px;margin-left:auto;margin-right:auto;}
@@ -635,11 +639,10 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
     <div>
       <h1>Calendario 2026 📅</h1><p>Planificador de estudio con IA</p>
     </div>
-    <button class="btn btn-sm" style="flex-shrink:0" onclick="toggleAddEventForm()" id="day-panel-addbtn">+ Agregar evento</button>
-  </div>
-  <div class="stabs" style="padding:14px 16px 0">
-    <button class="stab on" id="caltab-mes" onclick="calTab('mes')">📅 Mes</button>
-    <button class="stab" id="caltab-todos" onclick="calTab('todos')">✅ Todos mis eventos</button>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button class="btn btn-sm btn-outline" onclick="toggleTodosWin()" title="Todos mis eventos">✅</button>
+      <button class="btn btn-sm" onclick="toggleAddEventForm()" id="day-panel-addbtn">+ Agregar evento</button>
+    </div>
   </div>
 
   <div id="day-panel-form" class="card" style="display:none;margin:14px 16px 0">
@@ -660,26 +663,39 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
     <div class="row" style="justify-content:flex-end"><button class="btn btn-sm" onclick="addEv()">Guardar evento</button></div>
   </div>
 
-  <div class="fin-sub on" id="calsub-mes">
-  <div class="cal-two-col">
-    <div class="cal-col-left">
-      <div class="mstrip" id="mstrip"></div>
-      <div class="calstripe" id="calstripe"></div>
-      <div class="calnav">
-        <button class="calnavbtn" onclick="prevMes()">‹</button>
-        <div class="caltitle" id="caltitle"></div>
-        <button class="calnavbtn" onclick="nextMes()">›</button>
+  <div class="cal-canvas" id="cal-canvas">
+
+    <div class="calwin" id="calwin-cal">
+      <div class="calwin-bar" onmousedown="startDragCalWin(event,'cal')" ontouchstart="startDragCalWin(event,'cal')">⠿⠿⠿ Calendario</div>
+      <div class="calwin-body">
+        <div class="mstrip" id="mstrip"></div>
+        <div class="calstripe" id="calstripe"></div>
+        <div class="calnav">
+          <button class="calnavbtn" onclick="prevMes()">‹</button>
+          <div class="caltitle" id="caltitle"></div>
+          <button class="calnavbtn" onclick="nextMes()">›</button>
+        </div>
+        <div class="calgrid" id="calgrid"></div>
       </div>
-      <div class="calgrid" id="calgrid"></div>
+      <div class="resize-handle" onmousedown="startResizeCalWin(event,'cal')" ontouchstart="startResizeCalWin(event,'cal')">◢</div>
     </div>
 
-    <div class="cal-col-right" id="cal-col-right">
-      <div class="card day-panel-card" id="day-panel-card">
-        <div class="clabel" id="day-panel-title">📋 Selecciona un día</div>
+    <div class="calwin" id="calwin-panel">
+      <div class="calwin-bar" onmousedown="startDragCalWin(event,'panel')" ontouchstart="startDragCalWin(event,'panel')">⠿⠿⠿ <span id="day-panel-title">📋 Selecciona un día</span></div>
+      <div class="calwin-body">
         <div id="day-panel-events"></div>
-        <div class="resize-handle" onmousedown="startResizePanel(event)" ontouchstart="startResizePanel(event)">◢</div>
       </div>
+      <div class="resize-handle" onmousedown="startResizeCalWin(event,'panel')" ontouchstart="startResizeCalWin(event,'panel')">◢</div>
     </div>
+
+    <div class="calwin" id="calwin-todos" style="display:none">
+      <div class="calwin-bar" onmousedown="startDragCalWin(event,'todos')" ontouchstart="startDragCalWin(event,'todos')">⠿⠿⠿ ✅ Todos mis eventos <button onclick="toggleTodosWin()" style="float:right;background:none;border:none;cursor:pointer;color:var(--soft)">×</button></div>
+      <div class="calwin-body">
+        <div id="checklist-all"></div>
+      </div>
+      <div class="resize-handle" onmousedown="startResizeCalWin(event,'todos')" ontouchstart="startResizeCalWin(event,'todos')">◢</div>
+    </div>
+
   </div>
 
   <div class="cal-ai-strip">
@@ -695,11 +711,6 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
         <button class="csend" style="background:var(--mint-d)" onclick="sendCal()">➤</button>
       </div>
     </div>
-  </div>
-  </div>
-
-  <div class="fin-sub" id="calsub-todos">
-    <div id="checklist-all"></div>
   </div>
 </div>
 
@@ -1000,7 +1011,7 @@ function logout(){
   document.getElementById('auth-err').textContent='';
 }
 
-function defaultData(){return {wish:[],outfits:[],vision:[],eventos:[],lugares:[],colores:[],evitar:[],cnotas:'',sh:[],ch:[],movs:[],goals:[],fh:[],medidas:{},theme:'rosa',dailytodos:[],cuaderno:[],panelSize:null};}
+function defaultData(){return {wish:[],outfits:[],vision:[],eventos:[],lugares:[],colores:[],evitar:[],cnotas:'',sh:[],ch:[],movs:[],goals:[],fh:[],medidas:{},theme:'rosa',dailytodos:[],cuaderno:[],calWin:{}};}
 
 var saveTimeout=null;
 function save(){
@@ -1042,7 +1053,7 @@ function ir(pg){
   }
   var navEl=document.querySelector('.nav');
   if(navEl)navEl.style.display=(pg==='inicio')?'none':'flex';
-  if(pg==='cal'){renderCal();setTimeout(loadPanelSize,50);}
+  if(pg==='cal'){renderCal();setTimeout(initCalWindows,50);}
   if(pg==='inicio')initInicio();
   if(pg==='finanzas')renderFinanzas();
 }
@@ -1633,12 +1644,18 @@ function toggleCalAI(){
   if(arrow)arrow.textContent=open?'▾':'▴';
 }
 
-function calTab(tab){
-  document.getElementById('calsub-mes').className='fin-sub'+(tab==='mes'?' on':'');
-  document.getElementById('calsub-todos').className='fin-sub'+(tab==='todos'?' on':'');
-  document.getElementById('caltab-mes').className='stab'+(tab==='mes'?' on':'');
-  document.getElementById('caltab-todos').className='stab'+(tab==='todos'?' on':'');
-  if(tab==='todos')renderChecklistAll();
+function toggleTodosWin(){
+  var win=document.getElementById('calwin-todos');
+  var isHidden=win.style.display==='none'||!win.style.display;
+  win.style.display=isHidden?'flex':'none';
+  if(isHidden){
+    renderChecklistAll();
+    if(!S.calWin)S.calWin={};
+    if(!S.calWin.todos){S.calWin.todos={x:40,y:40,w:280,h:320};}
+    applyCalWinStyle('todos');
+    bringCalWinToFront('todos');
+  }
+  if(curUser){if(!S.calWin)S.calWin={};if(!S.calWin.todos)S.calWin.todos={};S.calWin.todos.open=isHidden;save();}
 }
 
 function toggleEvHecho(id){
@@ -1688,51 +1705,130 @@ function renderCal(){
 }
 function selDate(d){selD=(selD===d)?null:d;var m=MESES[curM];var mm=String(m.i).padStart(2,'0'),dd=String(d).padStart(2,'0');document.getElementById('evfec').value='2026-'+mm+'-'+dd;renderCal();renderDayPanel();}
 
-var panelResizeState=null;
-function startResizePanel(e){
-  e.preventDefault();e.stopPropagation();
+// ══ SISTEMA DE VENTANITAS DEL CALENDARIO ══
+var CALWIN_DEFAULTS={
+  cal:{x:0,y:0,w:520,h:560},
+  panel:{x:540,y:0,w:260,h:280},
+  todos:{x:540,y:0,w:280,h:320}
+};
+
+function applyCalWinStyle(key){
+  var el=document.getElementById('calwin-'+key);
+  if(!el)return;
+  var pos=(S.calWin&&S.calWin[key])||CALWIN_DEFAULTS[key];
+  el.style.left=pos.x+'px';
+  el.style.top=pos.y+'px';
+  el.style.width=pos.w+'px';
+  el.style.height=pos.h+'px';
+}
+
+function initCalWindows(){
+  if(!S.calWin)S.calWin={};
+  ['cal','panel','todos'].forEach(function(key){
+    if(!S.calWin[key])S.calWin[key]=Object.assign({},CALWIN_DEFAULTS[key]);
+    applyCalWinStyle(key);
+  });
+  var todosWin=document.getElementById('calwin-todos');
+  if(todosWin)todosWin.style.display=(S.calWin.todos&&S.calWin.todos.open)?'flex':'none';
+  var canvas=document.getElementById('cal-canvas');
+  if(canvas){
+    var maxBottom=0;
+    ['cal','panel','todos'].forEach(function(key){
+      var p=S.calWin[key];
+      maxBottom=Math.max(maxBottom,p.y+p.h);
+    });
+    canvas.style.minHeight=Math.max(640,maxBottom+30)+'px';
+  }
+}
+
+var calWinZ=10;
+function bringCalWinToFront(key){
+  calWinZ++;
+  var el=document.getElementById('calwin-'+key);
+  if(el)el.style.zIndex=calWinZ;
+}
+
+var calDragState=null;
+function startDragCalWin(e,key){
+  if(e.target.tagName==='BUTTON')return;
+  e.preventDefault();
   var isTouch=e.type==='touchstart';
   var point=isTouch?e.touches[0]:e;
-  var card=document.getElementById('day-panel-card');
-  var rect=card.getBoundingClientRect();
-  panelResizeState={startX:point.clientX,startY:point.clientY,startW:rect.width,startH:rect.height};
-  document.addEventListener(isTouch?'touchmove':'mousemove',onResizePanel,{passive:false});
-  document.addEventListener(isTouch?'touchend':'mouseup',endResizePanel);
+  var el=document.getElementById('calwin-'+key);
+  var rect=el.getBoundingClientRect();
+  var canvas=document.getElementById('cal-canvas');
+  var canvasRect=canvas.getBoundingClientRect();
+  calDragState={key:key,offsetX:point.clientX-rect.left,offsetY:point.clientY-rect.top};
+  bringCalWinToFront(key);
+  document.addEventListener(isTouch?'touchmove':'mousemove',onDragCalWin,{passive:false});
+  document.addEventListener(isTouch?'touchend':'mouseup',endDragCalWin);
 }
-function onResizePanel(e){
-  if(!panelResizeState)return;
+function onDragCalWin(e){
+  if(!calDragState)return;
   e.preventDefault();
   var isTouch=e.type==='touchmove';
   var point=isTouch?e.touches[0]:e;
-  var card=document.getElementById('day-panel-card');
-  var newW=Math.max(160,Math.min(420,panelResizeState.startW+(point.clientX-panelResizeState.startX)));
-  var newH=Math.max(160,panelResizeState.startH+(point.clientY-panelResizeState.startY));
-  card.style.width=newW+'px';
-  card.style.height=newH+'px';
-  document.getElementById('cal-col-right').style.flexBasis=newW+'px';
-  document.getElementById('cal-col-right').style.width=newW+'px';
+  var canvas=document.getElementById('cal-canvas');
+  var canvasRect=canvas.getBoundingClientRect();
+  var el=document.getElementById('calwin-'+calDragState.key);
+  var x=Math.max(0,point.clientX-canvasRect.left-calDragState.offsetX+canvas.scrollLeft);
+  var y=Math.max(0,point.clientY-canvasRect.top-calDragState.offsetY+canvas.scrollTop);
+  el.style.left=x+'px';
+  el.style.top=y+'px';
 }
-function endResizePanel(){
-  if(!panelResizeState)return;
-  var card=document.getElementById('day-panel-card');
-  S.panelSize={w:card.style.width,h:card.style.height};
+function endDragCalWin(){
+  if(!calDragState)return;
+  var key=calDragState.key;
+  var el=document.getElementById('calwin-'+key);
+  if(!S.calWin)S.calWin={};
+  if(!S.calWin[key])S.calWin[key]={};
+  S.calWin[key].x=parseInt(el.style.left);
+  S.calWin[key].y=parseInt(el.style.top);
   save();
-  document.removeEventListener('mousemove',onResizePanel);
-  document.removeEventListener('mouseup',endResizePanel);
-  document.removeEventListener('touchmove',onResizePanel);
-  document.removeEventListener('touchend',endResizePanel);
-  panelResizeState=null;
+  document.removeEventListener('mousemove',onDragCalWin);
+  document.removeEventListener('mouseup',endDragCalWin);
+  document.removeEventListener('touchmove',onDragCalWin);
+  document.removeEventListener('touchend',endDragCalWin);
+  calDragState=null;
 }
-function loadPanelSize(){
-  if(S.panelSize){
-    var card=document.getElementById('day-panel-card');
-    if(card){
-      card.style.width=S.panelSize.w;
-      card.style.height=S.panelSize.h;
-      var col=document.getElementById('cal-col-right');
-      if(col){col.style.flexBasis=S.panelSize.w;col.style.width=S.panelSize.w;}
-    }
-  }
+
+var calResizeState=null;
+function startResizeCalWin(e,key){
+  e.preventDefault();e.stopPropagation();
+  var isTouch=e.type==='touchstart';
+  var point=isTouch?e.touches[0]:e;
+  var el=document.getElementById('calwin-'+key);
+  var rect=el.getBoundingClientRect();
+  calResizeState={key:key,startX:point.clientX,startY:point.clientY,startW:rect.width,startH:rect.height};
+  bringCalWinToFront(key);
+  document.addEventListener(isTouch?'touchmove':'mousemove',onResizeCalWin,{passive:false});
+  document.addEventListener(isTouch?'touchend':'mouseup',endResizeCalWin);
+}
+function onResizeCalWin(e){
+  if(!calResizeState)return;
+  e.preventDefault();
+  var isTouch=e.type==='touchmove';
+  var point=isTouch?e.touches[0]:e;
+  var el=document.getElementById('calwin-'+calResizeState.key);
+  var newW=Math.max(220,calResizeState.startW+(point.clientX-calResizeState.startX));
+  var newH=Math.max(180,calResizeState.startH+(point.clientY-calResizeState.startY));
+  el.style.width=newW+'px';
+  el.style.height=newH+'px';
+}
+function endResizeCalWin(){
+  if(!calResizeState)return;
+  var key=calResizeState.key;
+  var el=document.getElementById('calwin-'+key);
+  if(!S.calWin)S.calWin={};
+  if(!S.calWin[key])S.calWin[key]={};
+  S.calWin[key].w=parseInt(el.style.width);
+  S.calWin[key].h=parseInt(el.style.height);
+  save();
+  document.removeEventListener('mousemove',onResizeCalWin);
+  document.removeEventListener('mouseup',endResizeCalWin);
+  document.removeEventListener('touchmove',onResizeCalWin);
+  document.removeEventListener('touchend',endResizeCalWin);
+  calResizeState=null;
 }
 
 function toggleAddEventForm(){
