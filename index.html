@@ -984,7 +984,7 @@ async function doLogin(){
   curUser=user;
   localStorage.setItem('mm-session-user',user);
   localStorage.setItem('mm-session-pass',pass);
-  S=res.data||defaultData();
+  S=reconciliarConCache(user,res.data);
   document.getElementById('login-screen').style.display='none';
   loadTheme();
   initInicio();
@@ -1009,6 +1009,7 @@ async function doRegister(){
   localStorage.setItem('mm-session-user',user);
   localStorage.setItem('mm-session-pass',pass);
   S=res.data||defaultData();
+  try{localStorage.setItem('mm-cache-'+user,JSON.stringify(S));}catch(e){}
   document.getElementById('login-screen').style.display='none';
   initInicio();
 }
@@ -1028,11 +1029,46 @@ function defaultData(){return {wish:[],outfits:[],vision:[],eventos:[],lugares:[
 var saveTimeout=null;
 function save(){
   if(!curUser)return;
-  // Guardado local instantáneo (respaldo) + guardado en la base de datos real (con un pequeño retraso para no saturar)
+  S._ts=Date.now();
+  // Respaldo local INSTANTÁNEO (de verdad, no se puede perder aunque falle internet)
+  try{localStorage.setItem('mm-cache-'+curUser,JSON.stringify(S));}catch(e){}
+  // Guardado en la base de datos real, con reintentos si falla
   clearTimeout(saveTimeout);
   saveTimeout=setTimeout(function(){
-    apiAuth({action:'save',user:curUser,pass:localStorage.getItem('mm-session-pass'),data:S}).catch(function(){});
+    saveToServerConReintentos(curUser,localStorage.getItem('mm-session-pass'),S,3);
   },600);
+}
+
+function saveToServerConReintentos(user,pass,data,intentosRestantes){
+  apiAuth({action:'save',user:user,pass:pass,data:data}).then(function(res){
+    if(!res||!res.ok){
+      if(intentosRestantes>0){
+        setTimeout(function(){saveToServerConReintentos(user,pass,data,intentosRestantes-1);},1500);
+      }
+    }
+  }).catch(function(){
+    if(intentosRestantes>0){
+      setTimeout(function(){saveToServerConReintentos(user,pass,data,intentosRestantes-1);},1500);
+    }
+  });
+}
+
+// Compara los datos del servidor con el respaldo local guardado en este dispositivo,
+// y usa siempre el más reciente (evita que un guardado remoto fallido borre cambios nuevos)
+function reconciliarConCache(user,dataServidor){
+  var cacheRaw=null;
+  try{cacheRaw=localStorage.getItem('mm-cache-'+user);}catch(e){}
+  if(!cacheRaw)return dataServidor||defaultData();
+  var cache;
+  try{cache=JSON.parse(cacheRaw);}catch(e){return dataServidor||defaultData();}
+  var tsServidor=(dataServidor&&dataServidor._ts)||0;
+  var tsCache=cache._ts||0;
+  if(tsCache>tsServidor){
+    // El respaldo local es más nuevo que lo que hay en el servidor: lo usamos y lo re-sincronizamos
+    setTimeout(function(){saveToServerConReintentos(user,localStorage.getItem('mm-session-pass'),cache,3);},800);
+    return cache;
+  }
+  return dataServidor||defaultData();
 }
 
 // Auto-login: intenta reconectar con la sesión guardada contra la base de datos real
@@ -1043,7 +1079,7 @@ async function checkSession(){
     var res=await apiAuth({action:'login',user:sessUser,pass:sessPass});
     if(res.ok){
       curUser=sessUser;
-      S=res.data||defaultData();
+      S=reconciliarConCache(sessUser,res.data);
       document.getElementById('login-screen').style.display='none';
       initInicio();
       return;
