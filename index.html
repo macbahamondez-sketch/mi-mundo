@@ -296,9 +296,9 @@ select{appearance:none;padding-right:30px;cursor:pointer;}
 .modal-close{float:right;background:none;border:none;font-size:22px;cursor:pointer;color:var(--soft);}
 
 /* CALENDARIO */
-.mstrip{display:flex;gap:6px;overflow-x:auto;padding:0 0 8px;scrollbar-width:none;}
+.mstrip{display:flex;gap:4px;padding:0 0 8px;width:100%;box-sizing:border-box;}
 .mstrip::-webkit-scrollbar{display:none;}
-.mchip{flex-shrink:0;border:none;border-radius:20px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:var(--border);color:var(--soft);}
+.mchip{flex:1 1 0;min-width:0;border:none;border-radius:20px;padding:7px 4px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;background:var(--border);color:var(--soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;}
 .mchip.on{background:var(--text);color:white;}
 .calnav{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px;}
 .caltitle{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;}
