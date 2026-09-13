@@ -1044,13 +1044,27 @@ function saveToServerConReintentos(user,pass,data,intentosRestantes){
     if(!res||!res.ok){
       if(intentosRestantes>0){
         setTimeout(function(){saveToServerConReintentos(user,pass,data,intentosRestantes-1);},1500);
+      }else{
+        mostrarAvisoGuardadoFallido();
       }
     }
   }).catch(function(){
     if(intentosRestantes>0){
       setTimeout(function(){saveToServerConReintentos(user,pass,data,intentosRestantes-1);},1500);
+    }else{
+      mostrarAvisoGuardadoFallido();
     }
   });
+}
+
+function mostrarAvisoGuardadoFallido(){
+  if(document.getElementById('aviso-guardado-fallido'))return;
+  var div=document.createElement('div');
+  div.id='aviso-guardado-fallido';
+  div.style.cssText='position:fixed;bottom:90px;left:16px;right:16px;background:#F4C7D1;color:#5A3A40;padding:12px 16px;border-radius:12px;font-size:13px;text-align:center;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.15)';
+  div.textContent='⚠️ No se pudo guardar tu último cambio. Revisa tu conexión a internet.';
+  document.body.appendChild(div);
+  setTimeout(function(){div.remove();},6000);
 }
 
 // Compara los datos del servidor con el respaldo local guardado en este dispositivo,
@@ -1114,14 +1128,32 @@ function stab(tab,btn){
 }
 
 // ══ FOTO ══
+function comprimirImagen(dataUrl,maxDim,calidad,callback){
+  var img=new Image();
+  img.onload=function(){
+    var w=img.width,h=img.height;
+    if(w>h&&w>maxDim){h=Math.round(h*(maxDim/w));w=maxDim;}
+    else if(h>maxDim){w=Math.round(w*(maxDim/h));h=maxDim;}
+    var canvas=document.createElement('canvas');
+    canvas.width=w;canvas.height=h;
+    var ctx=canvas.getContext('2d');
+    ctx.drawImage(img,0,0,w,h);
+    callback(canvas.toDataURL('image/jpeg',calidad));
+  };
+  img.onerror=function(){callback(dataUrl);}; // si algo falla, usa la original como respaldo
+  img.src=dataUrl;
+}
+
 function prevFoto(e,imgId,nmId,key){
   var file=e.target.files[0];if(!file)return;
   var reader=new FileReader();
   reader.onload=function(ev){
-    fotos[key]=ev.target.result;
-    var img=document.getElementById(imgId);
-    img.src=ev.target.result;img.style.display='block';
-    document.getElementById(nmId).textContent=file.name;
+    comprimirImagen(ev.target.result,900,0.7,function(comprimida){
+      fotos[key]=comprimida;
+      var img=document.getElementById(imgId);
+      img.src=comprimida;img.style.display='block';
+      document.getElementById(nmId).textContent=file.name;
+    });
   };
   reader.readAsDataURL(file);
 }
